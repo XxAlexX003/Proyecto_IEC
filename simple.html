@@ -269,12 +269,14 @@
                             <label for="modoDesc" class="form-label">¿Qué deseas calcular?</label>
                             <select id="modoDesc" class="form-select">
                                 <option value="desdeM">C y D a partir de M, d y t</option>
+                                <option value="desdeC">M y D a partir de C, d y t</option> <!-- NUEVO -->
                                 <option value="desdeD">M y C a partir de D, d y t</option>
                                 <option value="tiempo">Tiempo (t) a partir de M, C y d</option>
                             </select>
                             <small class="text-muted d-block mt-1">
-                                Usa “desde D” cuando el ejercicio te dé el descuento,
-                                o “Tiempo (t)” cuando te den M, C y d.
+                                Usa “desde C” si te dan C, d y t;  
+                                “Tiempo (t)” si te dan M, C y d;  
+                                “desde M” o “desde D” según el dato principal del problema.
                             </small>
                         </div>
                     </div>
