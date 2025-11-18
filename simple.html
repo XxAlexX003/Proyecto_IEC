@@ -241,132 +241,146 @@
             </div>
         </div>
 
-        <!-- Pestaña 2: Descuento simple -->
+                <!-- ============================
+            CALCULADORA DE DESCUENTO SIMPLE
+        ============================= -->
         <div class="tab-pane fade" id="pane-descuento" role="tabpanel">
-            <div class="card shadow-soft">
+            <div class="card shadow-sm border-0 mt-3">
                 <div class="card-body">
-                    <h5 class="card-title">Calculadora de Descuento Simple</h5>
-                    <p class="card-text small text-muted">
-                        <strong>Descuento comercial:</strong> D = M · d · t,  C = M − D. <br>
-                        <strong>Descuento real (justo):</strong> M = C (1 + d · t),
-                        C = M / (1 + d · t),  D = M − C.
+                    <h5 class="card-title mb-2">Calculadora de Descuento Simple</h5>
+                    <p class="text-muted small mb-3">
+                        <strong>Descuento comercial:</strong> D = M · d · t, C = M − D. <br>
+                        <strong>Descuento real (justo):</strong> M = C (1 + d · t), C = M / (1 + d · t), D = M − C.
                     </p>
 
                     <div class="row g-3">
                         <div class="col-md-4">
-                            <label class="form-label">Tipo de descuento</label>
+                            <label for="tipoDescuento" class="form-label">Tipo de descuento</label>
                             <select id="tipoDescuento" class="form-select">
                                 <option value="comercial">Comercial</option>
                                 <option value="real">Real (justo)</option>
                             </select>
-                            <div class="small-label mt-2">
+                            <small class="text-muted d-block mt-1">
                                 Elige el tipo de descuento que indique el problema.
-                            </div>
+                            </small>
                         </div>
-                        <div class="col-md-8">
-                            <div class="row g-2">
-                                <!-- Valor nominal -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Valor nominal futuro (M)</label>
-                                    <input type="number" id="MDesc"
-                                        min="0" step="0.01"
-                                        class="form-control"
-                                        placeholder="Ej: 185000" />
-                                    <div class="small-label">
-                                        Importe del pagaré / documento a su vencimiento.
-                                    </div>
-                                </div>
 
-                                <!-- Tasa de descuento -->
-                                <div class="col-md-6">
-                                    <label class="form-label">
-                                        Tasa de descuento (d)
-                                    </label>
-                                    <div class="input-group">
-                                        <input type="number" id="dDescValor"
-                                            min="0" step="0.0001"
-                                            class="form-control"
-                                            placeholder="Ej: 20" />
-                                        <span class="input-group-text">%</span>
-                                        <select id="dDescPeriodo" class="form-select">
-                                            <option value="anual">% anual</option>
-                                            <option value="semestral">% semestral</option>
-                                            <option value="trimestral">% trimestral</option>
-                                            <option value="mensual">% mensual</option>
-                                            <option value="diaria360">% diaria (año 360)</option>
-                                            <option value="diaria365">% diaria (año 365)</option>
-                                        </select>
-                                    </div>
-                                    <div class="small-label">
-                                        Ej: si dice “18% anual”, escribe 18 y elige “% anual”.
-                                        Si dice “2% mensual”, escribe 2 y elige “% mensual”.
-                                    </div>
-                                </div>
+                        <div class="col-md-4">
+                            <label for="modoDesc" class="form-label">¿Qué deseas calcular?</label>
+                            <select id="modoDesc" class="form-select">
+                                <option value="desdeM">C y D a partir de M, d y t</option>
+                                <option value="desdeD">M y C a partir de D, d y t</option>
+                                <option value="tiempo">Tiempo (t) a partir de M, C y d</option>
+                            </select>
+                            <small class="text-muted d-block mt-1">
+                                Usa “desde D” cuando el ejercicio te dé el descuento,
+                                o “Tiempo (t)” cuando te den M, C y d.
+                            </small>
+                        </div>
+                    </div>
 
-                                <!-- Tiempo -->
-                                <div class="col-12 mt-2">
-                                    <label class="form-label">Tiempo hasta el vencimiento (t)</label>
-                                    <div class="row g-1">
-                                        <div class="col-4">
-                                            <input type="number" min="0" step="1"
-                                                id="tDescAnos" class="form-control"
-                                                placeholder="Años" />
-                                        </div>
-                                        <div class="col-4">
-                                            <input type="number" min="0" step="1"
-                                                id="tDescMeses" class="form-control"
-                                                placeholder="Meses" />
-                                        </div>
-                                        <div class="col-4">
-                                            <input type="number" min="0" step="1"
-                                                id="tDescDias" class="form-control"
-                                                placeholder="Días (360)" />
-                                        </div>
-                                    </div>
-                                    <div class="small-label">
-                                        Llena solo lo que necesites.  
-                                        Ej: 3 meses → 0 años, 3 meses, 0 días.  
-                                        Para días se usa año comercial de 360 días.
-                                    </div>
-                                </div>
+                    <hr class="my-3">
+
+                    <div class="row g-3">
+                        <!-- Monto nominal -->
+                        <div class="col-md-4">
+                            <label for="MDesc" class="form-label">Valor nominal futuro (M)</label>
+                            <input type="number" class="form-control" id="MDesc" placeholder="Ej: 185000">
+                            <small class="text-muted">Importe del pagaré / documento a su vencimiento.</small>
+                        </div>
+
+                        <!-- Descuento conocido -->
+                        <div class="col-md-4">
+                            <label for="DDesc" class="form-label">Descuento conocido (D)</label>
+                            <input type="number" class="form-control" id="DDesc" placeholder="Ej: 5000">
+                            <small class="text-muted">Úsalo si el problema te da el descuento como dato.</small>
+                        </div>
+
+                        <!-- Valor actual conocido (C)  -->
+                        <div class="col-md-4">
+                            <label for="CDesc" class="form-label">Valor actual / anticipado conocido (C)</label>
+                            <input type="number" class="form-control" id="CDesc" placeholder="Ej: 945.05">
+                            <small class="text-muted">
+                                Monto que se recibe al descontar el documento.
+                            </small>
+                        </div>
+
+                        <!-- Tasa de descuento -->
+                        <div class="col-md-4">
+                            <label class="form-label">Tasa de descuento (d)</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="dDescValor" placeholder="Ej: 20">
+                                <span class="input-group-text">%</span>
+                                <select id="dDescPeriodo" class="form-select">
+                                    <option value="anual">% anual</option>
+                                    <option value="mensual">% mensual</option>
+                                    <option value="trimestral">% trimestral</option>
+                                    <option value="semestral">% semestral</option>
+                                    <option value="diaria360">% diaria (360)</option>
+                                    <option value="diaria365">% diaria (365)</option>
+                                </select>
                             </div>
+                            <small class="text-muted">
+                                Ej: si dice “18% anual”, escribe 18 y elige “% anual”. Si dice “2% mensual”, escribe 2 y elige “% mensual”.
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                        <!-- Tiempo desglosado -->
+                        <div class="col-md-4">
+                            <label class="form-label">Tiempo hasta el vencimiento (t)</label>
+                            <div class="d-flex gap-2">
+                                <input type="number" class="form-control" id="tDescAnos" placeholder="Años">
+                                <input type="number" class="form-control" id="tDescMeses" placeholder="Meses">
+                                <input type="number" class="form-control" id="tDescDias" placeholder="Días (360)">
+                            </div>
+                            <small class="text-muted">
+                                Llena solo lo que necesites. Ej: 3 meses → 0 años, 3 meses, 0 días.
+                            </small>
                         </div>
                     </div>
 
                     <hr class="my-3">
 
                     <div class="d-flex gap-2">
-                        <button class="btn btn-primary btn-soft" id="btnCalcularDescuento">
-                            Calcular
-                        </button>
-                        <button class="btn btn-outline-secondary" id="btnLimpiarDescuento">
-                            Limpiar
-                        </button>
+                        <button class="btn btn-primary" id="btnCalcularDescuento">Calcular</button>
+                        <button class="btn btn-outline-secondary" id="btnLimpiarDescuento">Limpiar</button>
                     </div>
 
-                    <div id="alertDescuento" class="alert alert-warning mt-3 d-none"></div>
-
-                    <div id="resultadoDescuento" class="mt-3 d-none">
-                        <h6>Resultados:</h6>
-                        <ul class="list-group mb-2">
-                            <li class="list-group-item">
-                                <strong>Valor nominal (M):</strong> <span id="resDM"></span>
+                    <!-- Resultados -->
+                    <div id="resultadoDescuento" class="mt-4 d-none">
+                        <h6 class="mb-3">Resultados:</h6>
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Valor nominal (M):</span>
+                                <span id="resDM"></span>
                             </li>
-                            <li class="list-group-item">
-                                <strong>Valor actual / anticipado (C):</strong> <span id="resDC"></span>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Valor actual / anticipado (C):</span>
+                                <span id="resDC"></span>
                             </li>
-                            <li class="list-group-item">
-                                <strong>Descuento (D):</strong> <span id="resDD"></span>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Descuento (D):</span>
+                                <span id="resDD"></span>
                             </li>
-                            <li class="list-group-item">
-                                <strong>Tiempo (años):</strong> <span id="resDT"></span>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Tiempo (años):</span>
+                                <span id="resDT"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Tiempo aproximado:</span>
+                                <span id="resDTDesglosado"></span>
                             </li>
                         </ul>
-                        <div class="formula-box" id="detalleFormulaDescuento"></div>
+
+                        <pre class="bg-light rounded p-3 small mb-0" id="detalleFormulaDescuento"
+                            style="white-space: pre-wrap; font-family: 'Fira Code', 'Courier New', monospace;"></pre>
                     </div>
                 </div>
             </div>
         </div>
+
 
     </div>
 
@@ -375,14 +389,12 @@
     </footer>
 </div>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Tu JS -->
-<script src="app.js"></script>
-
-<!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<!-- Tus scripts -->
+<script src="app.js"></script>
+<script src="interes.js"></script>
+<script src="descuento.js"></script>
 </body>
 </html>
