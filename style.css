@@ -1,0 +1,193 @@
+/* Fuente general */
+body {
+    font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f4f6fb;
+    color: #1f2933;
+}
+
+/* Contenedor principal dejando espacio bajo la navbar */
+.main-container {
+    margin-top: 5rem;
+}
+
+/* NAVBAR */
+.custom-navbar {
+    background: #ffffff;
+}
+
+.custom-navbar .navbar-brand {
+    color: #4450a3;
+    letter-spacing: 0.03em;
+}
+
+.custom-navbar .navbar-brand:hover {
+    color: #2f3b8f;
+}
+
+.custom-navbar .nav-link {
+    color: #4b5563;
+    font-weight: 500;
+    position: relative;
+}
+
+.custom-navbar .nav-link:hover {
+    color: #111827;
+}
+
+.custom-navbar .nav-link.active-page {
+    color: #2f3b8f;
+}
+
+.custom-navbar .nav-link.active-page::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.2rem;
+    width: 100%;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #4f46e5, #38bdf8);
+}
+
+/* Cabecera tipo "hero" */
+.hero {
+    background: radial-gradient(circle at top left, #a5b4fc, #4f46e5);
+    color: white;
+    padding: 2.2rem 1.5rem;
+    border-radius: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.hero h1 {
+    font-size: 1.9rem;
+    font-weight: 700;
+}
+
+.hero p {
+    margin: 0.4rem 0 0;
+    opacity: .95;
+}
+
+/* Card general */
+.card {
+    border-radius: 1.2rem;
+    border: none;
+}
+
+.shadow-soft {
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+}
+
+/* Caja de fórmulas */
+.formula-box {
+    font-family: "JetBrains Mono", "Consolas", "Courier New", monospace;
+    background: #eef1ff;
+    border-radius: .7rem;
+    padding: .75rem 1rem;
+    font-size: .9rem;
+    white-space: pre-line;
+    border: 1px solid rgba(79, 70, 229, .08);
+    color: #111827;
+}
+
+/* Textos pequeños */
+.small-label {
+    font-size: .85rem;
+    color: #6b7280;
+}
+
+/* Botones suaves */
+.btn-soft {
+    border-radius: 999px;
+    padding-inline: 1.6rem;
+    transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
+}
+
+.btn-soft:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+}
+
+/* Tabs más suaves */
+.card-tabs .nav-link {
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-weight: 500;
+    color: #6b7280;
+}
+
+.card-tabs .nav-link.active {
+    color: #111827;
+    border-color: #4f46e5;
+    background-color: transparent;
+}
+
+/* Listas bonitas */
+.list-check {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.list-check li::before {
+    content: "✔";
+    color: #22c55e;
+    margin-right: .5rem;
+    font-size: .9rem;
+}
+
+.list-dot {
+    list-style: none;
+    padding-left: 0;
+}
+
+.list-dot li::before {
+    content: "•";
+    color: #4f46e5;
+    margin-right: .4rem;
+}
+
+/* Badge suave */
+.bg-soft {
+    background: rgba(191, 219, 254, 0.9);
+    color: #1d4ed8;
+    border-radius: 999px;
+    padding: .35rem .9rem;
+    font-weight: 500;
+}
+
+/* Footer */
+.footer-text {
+    margin-top: 2.5rem;
+    font-size: .85rem;
+    color: #6b7280;
+}
+
+/* Inputs */
+.form-control, .form-select {
+    border-radius: .8rem;
+    border-color: #d1d5db;
+    transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 0.15rem rgba(79, 70, 229, 0.15);
+}
+
+/* Alerts */
+.alert {
+    border-radius: .8rem;
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 576px) {
+    .hero {
+        padding: 1.8rem 1.2rem;
+    }
+
+    .hero h1 {
+        font-size: 1.6rem;
+    }
+}
