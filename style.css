@@ -191,3 +191,11 @@ body {
         font-size: 1.6rem;
     }
 }
+/* Resaltado especial del valor calculado */
+.result-highlight {
+    background: #eef2ff !important;
+    color: #3730a3 !important;
+    font-weight: 600;
+    padding: 0.25rem 0.4rem;
+    border-radius: 6px;
+}

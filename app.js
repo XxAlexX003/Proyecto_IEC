@@ -1,6 +1,8 @@
 // ==========================
 //  UTILIDADES GENERALES
 // ==========================
+
+// Convierte años/meses/días a años (año comercial de 360 días)
 function tiempoDesglosadoAnios(anios, meses, dias) {
     var a = Number(anios);
     var m = Number(meses);
@@ -10,10 +12,10 @@ function tiempoDesglosadoAnios(anios, meses, dias) {
     if (isNaN(m)) m = 0;
     if (isNaN(d)) d = 0;
 
-    // Año comercial de 360 días
     return a + (m / 12) + (d / 360);
 }
 
+// Convierte una tasa dada en cierto periodo a tasa anual simple (decimal)
 function tasaAPeriodoAnual(valorPorciento, periodo) {
     var r = Number(valorPorciento);
     if (isNaN(r) || r < 0) return NaN;
@@ -31,6 +33,7 @@ function tasaAPeriodoAnual(valorPorciento, periodo) {
     }
 }
 
+// Formateos
 function formatMoney(x) {
     return "$" + x.toFixed(2);
 }
@@ -39,26 +42,31 @@ function formatPercent(i) {
     return (i * 100).toFixed(4) + " %";
 }
 
+// Habilitar / deshabilitar un input
 function setDisabled(id, disabled) {
     var el = document.getElementById(id);
     if (!el) return;
     el.disabled = disabled;
-    if (disabled) el.value = "";
+    if (disabled) {
+        el.value = "";
+    }
 }
 
+// Para tiempo de INTERÉS SIMPLE
 function setDisabledTiempoSimple(disabled) {
-    ["tAnos","tMeses","tDias"].forEach(function(id){
+    ["tAnos", "tMeses", "tDias"].forEach(function (id) {
         setDisabled(id, disabled);
     });
 }
 
+// Para tiempo de DESCUENTO SIMPLE
 function setDisabledTiempoDesc(disabled) {
-    ["tDescAnos","tDescMeses","tDescDias"].forEach(function(id){
+    ["tDescAnos", "tDescMeses", "tDescDias"].forEach(function (id) {
         setDisabled(id, disabled);
     });
 }
 
-// Desglosar t (en años) a años/meses/días (año 360)
+// Desglosa t (años, base 360) en años / meses / días aprox.
 function desglosarTiempo360(tAnios) {
     var totalDias = tAnios * 360;
     var anios = Math.floor(totalDias / 360);
