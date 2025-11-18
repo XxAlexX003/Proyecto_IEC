@@ -52,6 +52,65 @@ function formatPercent(i) {
     return (i * 100).toFixed(4) + " %";
 }
 
+// ----- Tasa anual y equivalencias -----
+var ultimaTasaAnual = null; // siempre en decimal
+
+function tasaDesdeAnual(iAnual, periodo) {
+    if (iAnual == null || isNaN(iAnual)) return NaN;
+
+    switch (periodo) {
+        case "anual":      return iAnual;
+        case "semestral":  return iAnual / 2;
+        case "trimestral": return iAnual / 4;
+        case "mensual":    return iAnual / 12;
+        case "diaria360":  return iAnual / 360;
+        case "diaria365":  return iAnual / 365;
+        default:           return iAnual;
+    }
+}
+
+function actualizarTasaEquivalenteResultado() {
+    var span = document.getElementById("resTasa");
+    var sel = document.getElementById("resTasaPeriodo");
+    if (!span || !sel) return;
+
+    if (ultimaTasaAnual == null || isNaN(ultimaTasaAnual)) {
+        span.innerText = "";
+        return;
+    }
+
+    var iMostrar = tasaDesdeAnual(ultimaTasaAnual, sel.value);
+    if (isNaN(iMostrar)) {
+        span.innerText = "";
+    } else {
+        span.innerText = formatPercent(iMostrar);
+    }
+}
+
+// ----- Resaltado del resultado calculado -----
+function limpiarResaltado() {
+    document.querySelectorAll(".result-highlight").forEach(function (el) {
+        el.classList.remove("result-highlight");
+    });
+}
+
+function marcarResultado(tipo) {
+    limpiarResaltado();
+
+    var id = null;
+    switch (tipo) {
+        case "monto":   id = "resMonto";        break;
+        case "capital": id = "resCapital";      break;
+        case "interes": id = "resInteres";      break;
+        case "tasa":    id = "resTasa";         break;
+        case "tiempo":  id = "resTiempoAnios";  break;
+    }
+    if (id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.add("result-highlight");
+    }
+}
+
 // Helper para habilitar / deshabilitar inputs
 function setDisabled(id, disabled) {
     var el = document.getElementById(id);
@@ -63,7 +122,7 @@ function setDisabled(id, disabled) {
 }
 
 function setDisabledTiempo(disabled) {
-    ["tAnos","tMeses","tDias"].forEach(function(id){
+    ["tAnos", "tMeses", "tDias"].forEach(function (id) {
         setDisabled(id, disabled);
     });
 }
@@ -72,6 +131,35 @@ function setDisabledTiempo(disabled) {
 //  LÓGICA AL CARGAR LA PÁGINA
 // ==========================
 document.addEventListener("DOMContentLoaded", function () {
+
+    // ----- función para bloquear/activar tiempo manual vs fechas -----
+    function actualizarModoTiempo() {
+        var tipoSelect = document.getElementById("tipoCalculo");
+        var tipo = tipoSelect ? tipoSelect.value : "monto";
+
+        var modoRadio = document.querySelector('input[name="modoTiempo"]:checked');
+        var modo = modoRadio ? modoRadio.value : "manual";
+
+        // Si estoy calculando t, no debe poder meter tiempo de ninguna forma
+        if (tipo === "tiempo") {
+            setDisabledTiempo(true);
+            setDisabled("fechaInicio", true);
+            setDisabled("fechaFin", true);
+            return;
+        }
+
+        if (modo === "manual") {
+            // Manual habilitado, fechas deshabilitadas
+            setDisabledTiempo(false);
+            setDisabled("fechaInicio", true);
+            setDisabled("fechaFin", true);
+        } else {
+            // Fechas habilitadas, manual deshabilitado
+            setDisabledTiempo(true);
+            setDisabled("fechaInicio", false);
+            setDisabled("fechaFin", false);
+        }
+    }
 
     // ==========================
     //   CONFIGURAR CAMPOS (M,C,I,i,t)
@@ -82,12 +170,16 @@ document.addEventListener("DOMContentLoaded", function () {
         function actualizarCamposPorTipo() {
             var tipo = selectTipo.value;
 
-            // Primero habilitamos todo
+            // Primero habilitamos todo (luego modoTiempo ajusta)
             setDisabled("capitalInput", false);
             setDisabled("montoInput", false);
             setDisabled("interesInput", false);
             setDisabled("tasaValor", false);
+            var selPeriodo = document.getElementById("tasaPeriodo");
+            if (selPeriodo) selPeriodo.disabled = false;
             setDisabledTiempo(false);
+            setDisabled("fechaInicio", false);
+            setDisabled("fechaFin", false);
 
             // Luego deshabilitamos según el tipo a calcular
             switch (tipo) {
@@ -110,17 +202,28 @@ document.addEventListener("DOMContentLoaded", function () {
                     break;
 
                 case "tasa":
-                    // Calcular i => NO escribo tasa ni I
+                    // Calcular i => NO escribo tasa ni monto.
                     setDisabled("tasaValor", true);
-                    setDisabled("interesInput", true);
+                    if (selPeriodo) selPeriodo.disabled = true;
+                    setDisabled("montoInput", true);
+                    // interesInput queda habilitado
                     break;
 
                 case "tiempo":
                     // Calcular t => NO escribo t ni I
                     setDisabledTiempo(true);
                     setDisabled("interesInput", true);
+                    // también bloqueamos fechas
+                    setDisabled("fechaInicio", true);
+                    setDisabled("fechaFin", true);
                     break;
             }
+
+            // actualizar bloqueo manual/fechas
+            actualizarModoTiempo();
+
+            // al cambiar tipo, quito resaltado
+            limpiarResaltado();
         }
 
         // Ejecutar al cargar
@@ -129,6 +232,25 @@ document.addEventListener("DOMContentLoaded", function () {
         // Ejecutar cada vez que cambia la opción
         selectTipo.addEventListener("change", actualizarCamposPorTipo);
     }
+
+    // Listener del selector de periodo en resultados
+    var selResPeriodo = document.getElementById("resTasaPeriodo");
+    if (selResPeriodo) {
+        selResPeriodo.addEventListener("change", actualizarTasaEquivalenteResultado);
+    }
+
+    // Listeners para los radios de modo de tiempo
+    var radioManual = document.getElementById("modoTiempoManual");
+    var radioFechas = document.getElementById("modoTiempoFechas");
+    if (radioManual) {
+        radioManual.addEventListener("change", actualizarModoTiempo);
+    }
+    if (radioFechas) {
+        radioFechas.addEventListener("change", actualizarModoTiempo);
+    }
+
+    // Llamada inicial (por si la página carga con algo raro)
+    actualizarModoTiempo();
 
     // ==========================
     //   INTERÉS SIMPLE
@@ -151,7 +273,49 @@ document.addEventListener("DOMContentLoaded", function () {
             var tA = parseFloat(document.getElementById("tAnos").value);
             var tM = parseFloat(document.getElementById("tMeses").value);
             var tD = parseFloat(document.getElementById("tDias").value);
-            var t = tiempoDesglosadoAnios(tA, tM, tD);
+
+            // --- Tiempo: manual vs fechas ---
+            var modoTiempoRadio = document.querySelector('input[name="modoTiempo"]:checked');
+            var modoTiempo = modoTiempoRadio ? modoTiempoRadio.value : "manual";
+
+            var t;                    // tiempo que se usará en las fórmulas (en años, base 360)
+            var usoFechas = false;    // para saber si debemos mostrar tiempo real y aproximado
+            var diasReal = NaN;
+            var tReal365 = NaN;
+            var tComercial360 = NaN;
+
+            if (modoTiempo === "fechas" && tipo !== "tiempo") {
+                var fechaIniStr = document.getElementById("fechaInicio").value;
+                var fechaFinStr = document.getElementById("fechaFin").value;
+
+                if (fechaIniStr && fechaFinStr) {
+                    var ini = new Date(fechaIniStr + "T00:00:00");
+                    var fin = new Date(fechaFinStr + "T00:00:00");
+
+                    if (isNaN(ini.getTime()) || isNaN(fin.getTime())) {
+                        throw "Las fechas ingresadas no son válidas.";
+                    }
+
+                    var diffMs = fin - ini;
+                    if (diffMs <= 0) {
+                        throw "La fecha final debe ser posterior a la fecha inicial.";
+                    }
+
+                    diasReal = diffMs / (1000 * 60 * 60 * 24);
+                    usoFechas = true;
+                    tReal365 = diasReal / 365;
+                    tComercial360 = diasReal / 360;
+
+                    // Para las fórmulas principales usamos el tiempo aproximado (360)
+                    t = tComercial360;
+                } else {
+                    // Si no están las dos fechas, caemos al tiempo manual
+                    t = tiempoDesglosadoAnios(tA, tM, tD);
+                }
+            } else {
+                // Modo manual o tipo = tiempo (donde no se usa directamente fechas)
+                t = tiempoDesglosadoAnios(tA, tM, tD);
+            }
 
             var resultBox = document.getElementById("resultadoInteres");
             var detalleBox = document.getElementById("detalleFormulaInteres");
@@ -160,6 +324,9 @@ document.addEventListener("DOMContentLoaded", function () {
             if (detalleBox) detalleBox.innerText = "";
 
             try {
+                // ==========================
+                //   CÁLCULOS POR TIPO
+                // ==========================
                 switch (tipo) {
                     case "monto":
                         if (isNaN(C) || isNaN(i) || isNaN(t) || t <= 0) {
@@ -195,14 +362,20 @@ document.addEventListener("DOMContentLoaded", function () {
                         break;
 
                     case "tasa":
-                        if (isNaN(C) || isNaN(M) || isNaN(t) || t <= 0) {
-                            throw "Para calcular la tasa (i) necesitas Capital (C), Monto (M) y Tiempo (t).";
+                        // Calcular i con i = I / (C · t).
+                        if (isNaN(C) || isNaN(t) || t <= 0) {
+                            throw "Para calcular la tasa (i) necesitas Capital (C), Tiempo (t) y el Interés (I).";
                         }
-                        i = (M / C - 1) / t;
-                        I = M - C;
+                        if (isNaN(I) || I <= 0) {
+                            throw "Proporciona el Interés total (I) positivo para calcular la tasa.";
+                        }
+
+                        i = I / (C * t);
+                        M = C + I;
+
                         detalleBox.innerText =
-                            "i = (M / C − 1) / t\n" +
-                            "i = (" + M.toFixed(2) + " / " + C.toFixed(2) + " − 1) / " + t.toFixed(6);
+                            "i = I / (C · t)\n" +
+                            "i = " + I.toFixed(2) + " / (" + C.toFixed(2) + " · " + t.toFixed(6) + ")";
                         break;
 
                     case "tiempo":
@@ -218,24 +391,41 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 // Desglose de tiempo en años/meses/días aproximados (año de 360 días)
-                var tAnios = t;
-                var totalDias = tAnios * 360;
+                var tAniosParaDesglose = t;
+                var totalDias = tAniosParaDesglose * 360;
                 var anios = Math.floor(totalDias / 360);
                 var diasRestantes = totalDias % 360;
                 var meses = Math.floor(diasRestantes / 30);
                 var dias = Math.round(diasRestantes % 30);
-
                 var desglose = anios + " años, " + meses + " meses, " + dias + " días (aprox.)";
 
-                // Mostrar resultados
+                // Guardar tasa anual y actualizar según periodo elegido
+                ultimaTasaAnual = i;
+                actualizarTasaEquivalenteResultado();
+
+                // Mostrar resultados numéricos
                 document.getElementById("resCapital").innerText = formatMoney(C);
                 document.getElementById("resMonto").innerText = formatMoney(M);
                 document.getElementById("resInteres").innerText = formatMoney(I);
-                document.getElementById("resTasa").innerText = formatPercent(i);
-                document.getElementById("resTiempoAnios").innerText = tAnios.toFixed(6) + " años";
-                document.getElementById("resTiempoDesglosado").innerText = desglose;
+
+                // Mostrar tiempos
+                if (usoFechas && !isNaN(tReal365) && !isNaN(tComercial360) && !isNaN(diasReal)) {
+                    document.getElementById("resTiempoAnios").innerText =
+                        tReal365.toFixed(6) + " años (tiempo real, 365 días ≈ " +
+                        diasReal.toFixed(0) + " días)";
+                    document.getElementById("resTiempoDesglosado").innerText =
+                        tComercial360.toFixed(6) + " años (tiempo aproximado, 360 días) ≈ " +
+                        desglose;
+                } else {
+                    document.getElementById("resTiempoAnios").innerText =
+                        tAniosParaDesglose.toFixed(6) + " años";
+                    document.getElementById("resTiempoDesglosado").innerText = desglose;
+                }
 
                 resultBox.classList.remove("d-none");
+
+                // marcar cuál fue calculado
+                marcarResultado(tipo);
 
                 Swal.fire({
                     icon: "success",
@@ -245,6 +435,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
 
             } catch (error) {
+                limpiarResaltado();
                 Swal.fire({
                     icon: "error",
                     title: "Datos incompletos",
@@ -254,97 +445,33 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         btnLimpiarInteres.addEventListener("click", function () {
-            ["capitalInput","montoInput","interesInput","tasaValor",
-             "tAnos","tMeses","tDias"].forEach(function(id) {
+            ["capitalInput", "montoInput", "interesInput", "tasaValor",
+                "tAnos", "tMeses", "tDias",
+                "fechaInicio", "fechaFin"].forEach(function (id) {
                 var el = document.getElementById(id);
                 if (el && !el.disabled) {
                     el.value = "";
                 }
             });
+
+            // Reset de tasa en resultados
+            ultimaTasaAnual = null;
+            var selResPeriodo2 = document.getElementById("resTasaPeriodo");
+            if (selResPeriodo2) selResPeriodo2.value = "anual";
+            var spanTasa = document.getElementById("resTasa");
+            if (spanTasa) spanTasa.innerText = "";
+
             var resultBox = document.getElementById("resultadoInteres");
             if (resultBox) resultBox.classList.add("d-none");
-        });
-    }
 
-    // ==========================
-    //   DESCUENTO SIMPLE
-    // ==========================
-    var btnCalcularDescuento = document.getElementById("btnCalcularDescuento");
-    var btnLimpiarDescuento = document.getElementById("btnLimpiarDescuento");
+            // Dejo el modo de tiempo en manual por defecto
+            var radioManual2 = document.getElementById("modoTiempoManual");
+            var radioFechas2 = document.getElementById("modoTiempoFechas");
+            if (radioManual2) radioManual2.checked = true;
+            if (radioFechas2) radioFechas2.checked = false;
+            actualizarModoTiempo();
 
-    if (btnCalcularDescuento && btnLimpiarDescuento) {
-        btnCalcularDescuento.addEventListener("click", function () {
-            var tipo = document.getElementById("tipoDescuento").value;
-
-            var M = parseFloat(document.getElementById("MDesc").value);
-
-            var dValor = parseFloat(document.getElementById("dDescValor").value);
-            var dPeriodo = document.getElementById("dDescPeriodo").value;
-            var d = tasaAPeriodoAnual(dValor, dPeriodo); // descuento anual (decimal)
-
-            var tA = parseFloat(document.getElementById("tDescAnos").value);
-            var tM = parseFloat(document.getElementById("tDescMeses").value);
-            var tD = parseFloat(document.getElementById("tDescDias").value);
-            var t = tiempoDesglosadoAnios(tA, tM, tD);   // tiempo en años
-
-            var resultBox = document.getElementById("resultadoDescuento");
-            var detalleBox = document.getElementById("detalleFormulaDescuento");
-
-            resultBox.classList.add("d-none");
-            if (detalleBox) detalleBox.innerText = "";
-
-            if (isNaN(M) || isNaN(d) || isNaN(t) || t <= 0) {
-                Swal.fire({
-                    icon: "warning",
-                    title: "Faltan datos",
-                    text: "Completa M, d y t correctamente para calcular el descuento."
-                });
-                return;
-            }
-
-            var C, D;
-
-            if (tipo === "comercial") {
-                // Descuento comercial: D = M d t, C = M - D
-                D = M * d * t;
-                C = M - D;
-                detalleBox.innerText =
-                    "Descuento comercial:\n" +
-                    "D = M · d · t\n" +
-                    "D = " + M.toFixed(2) + " · " + d.toFixed(6) + " · " + t.toFixed(6) +
-                    "\nC = M − D";
-            } else {
-                // Descuento real: M = C (1 + d t) → C = M / (1 + d t), D = M - C
-                C = M / (1 + d * t);
-                D = M - C;
-                detalleBox.innerText =
-                    "Descuento real (justo):\n" +
-                    "M = C (1 + d · t)  ⇒  C = M / (1 + d · t)\n" +
-                    "C = " + M.toFixed(2) + " / (1 + " + d.toFixed(6) + " · " + t.toFixed(6) + ")";
-            }
-
-            document.getElementById("resDM").innerText = formatMoney(M);
-            document.getElementById("resDC").innerText = formatMoney(C);
-            document.getElementById("resDD").innerText = formatMoney(D);
-            document.getElementById("resDT").innerText = t.toFixed(6) + " años";
-
-            resultBox.classList.remove("d-none");
-
-            Swal.fire({
-                icon: "success",
-                title: "Descuento calculado",
-                showConfirmButton: false,
-                timer: 1100
-            });
-        });
-
-        btnLimpiarDescuento.addEventListener("click", function () {
-            ["MDesc","dDescValor","tDescAnos","tDescMeses","tDescDias"].forEach(function(id) {
-                var el = document.getElementById(id);
-                if (el) el.value = "";
-            });
-            var resultBox = document.getElementById("resultadoDescuento");
-            if (resultBox) resultBox.classList.add("d-none");
+            limpiarResaltado();
         });
     }
 });
