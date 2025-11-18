@@ -19,7 +19,7 @@
     >
 
     <!-- Tus estilos -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -95,7 +95,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Calculadora de Interés Simple</h5>
                     <p class="card-text small text-muted">
-                        Fórmulas base:
+                        Fórmulas base (con tiempo en años):
                     </p>
                     <div class="formula-box mb-3">
                         M = C (1 + i · t)  |  I = C · i · t  |  
@@ -123,46 +123,75 @@
                         <!-- Datos de entrada -->
                         <div class="col-md-8">
                             <div class="row g-2">
+                                <!-- Capital, Monto e Interés -->
                                 <div class="col-md-6">
-                                    <label class="form-label">Capital (C)</label>
+                                    <label class="form-label">Capital inicial (C)</label>
                                     <input type="number" min="0" step="0.01"
                                            id="capitalInput" class="form-control"
-                                           placeholder="Ej: 20000" />
+                                           placeholder="Ej: 50000" />
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Monto (M)</label>
+                                    <label class="form-label">Monto final (M)</label>
                                     <input type="number" min="0" step="0.01"
                                            id="montoInput" class="form-control"
-                                           placeholder="Ej: 20400" />
+                                           placeholder="Ej: 58500" />
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Interés (I)</label>
+                                    <label class="form-label">Interés total (I)</label>
                                     <input type="number" min="0" step="0.01"
                                            id="interesInput" class="form-control"
-                                           placeholder="Ej: 400" />
+                                           placeholder="Ej: 8500" />
                                 </div>
+
+                                <!-- Tasa -->
                                 <div class="col-md-6">
                                     <label class="form-label">
-                                        Tasa anual simple (i) <span class="small-label">(en %)</span>
+                                        Tasa simple pactada
                                     </label>
-                                    <input type="number" min="0" step="0.0001"
-                                           id="tasaInput" class="form-control"
-                                           placeholder="Ej: 12 para 12% anual" />
+                                    <div class="input-group">
+                                        <input type="number" min="0" step="0.0001"
+                                               id="tasaValor" class="form-control"
+                                               placeholder="Ej: 12" />
+                                        <span class="input-group-text">%</span>
+                                        <select id="tasaPeriodo" class="form-select">
+                                            <option value="anual">% anual</option>
+                                            <option value="semestral">% semestral</option>
+                                            <option value="trimestral">% trimestral</option>
+                                            <option value="mensual">% mensual</option>
+                                            <option value="diaria360">% diaria (año 360)</option>
+                                            <option value="diaria365">% diaria (año 365)</option>
+                                        </select>
+                                    </div>
+                                    <div class="small-label">
+                                        Ej: si dice “1.5% mensual”, escribe 1.5 y elige “% mensual”.
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Tiempo (t)</label>
-                                    <input type="number" min="0" step="0.0001"
-                                           id="tiempoInput" class="form-control"
-                                           placeholder="Ej: 2 (meses), 60 (días)..." />
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Unidad de tiempo</label>
-                                    <select id="unidadTiempo" class="form-select">
-                                        <option value="anios">Años (t en años)</option>
-                                        <option value="meses">Meses (t en meses / 12)</option>
-                                        <option value="dias360">Días (año comercial 360)</option>
-                                        <option value="dias365">Días (año real 365)</option>
-                                    </select>
+
+                                <!-- Tiempo -->
+                                <div class="col-12 mt-2">
+                                    <label class="form-label">Tiempo total (t)</label>
+                                    <div class="row g-1">
+                                        <div class="col-4">
+                                            <input type="number" min="0" step="1"
+                                                   id="tAnos" class="form-control"
+                                                   placeholder="Años" />
+                                        </div>
+                                        <div class="col-4">
+                                            <input type="number" min="0" step="1"
+                                                   id="tMeses" class="form-control"
+                                                   placeholder="Meses" />
+                                        </div>
+                                        <div class="col-4">
+                                            <input type="number" min="0" step="1"
+                                                   id="tDias" class="form-control"
+                                                   placeholder="Días (360)" />
+                                        </div>
+                                    </div>
+                                    <div class="small-label">
+                                        Llena solo lo que necesites.  
+                                        Ej: 1 año y medio → 1 año, 6 meses, 0 días.  
+                                        Para días se usa año comercial de 360 días.
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -195,7 +224,7 @@
                                 <strong>Interés (I):</strong> <span id="resInteres"></span>
                             </li>
                             <li class="list-group-item">
-                                <strong>Tasa anual simple (i):</strong> <span id="resTasa"></span>
+                                <strong>Tasa simple equivalente anual (i):</strong> <span id="resTasa"></span>
                             </li>
                             <li class="list-group-item">
                                 <strong>Tiempo (t en años):</strong> <span id="resTiempoAnios"></span>
@@ -230,43 +259,75 @@
                                 <option value="comercial">Comercial</option>
                                 <option value="real">Real (justo)</option>
                             </select>
+                            <div class="small-label mt-2">
+                                Elige el tipo de descuento que indique el problema.
+                            </div>
                         </div>
                         <div class="col-md-8">
                             <div class="row g-2">
+                                <!-- Valor nominal -->
                                 <div class="col-md-6">
                                     <label class="form-label">Valor nominal futuro (M)</label>
                                     <input type="number" id="MDesc"
-                                           min="0" step="0.01"
-                                           class="form-control"
-                                           placeholder="Ej: 185000" />
+                                        min="0" step="0.01"
+                                        class="form-control"
+                                        placeholder="Ej: 185000" />
                                     <div class="small-label">
                                         Importe del pagaré / documento a su vencimiento.
                                     </div>
                                 </div>
+
+                                <!-- Tasa de descuento -->
                                 <div class="col-md-6">
                                     <label class="form-label">
-                                        Tasa de descuento (d) anual <span class="small-label">(en %)</span>
+                                        Tasa de descuento (d)
                                     </label>
-                                    <input type="number" id="dDesc"
-                                           min="0" step="0.0001"
-                                           class="form-control"
-                                           placeholder="Ej: 20 para 20% anual" />
+                                    <div class="input-group">
+                                        <input type="number" id="dDescValor"
+                                            min="0" step="0.0001"
+                                            class="form-control"
+                                            placeholder="Ej: 20" />
+                                        <span class="input-group-text">%</span>
+                                        <select id="dDescPeriodo" class="form-select">
+                                            <option value="anual">% anual</option>
+                                            <option value="semestral">% semestral</option>
+                                            <option value="trimestral">% trimestral</option>
+                                            <option value="mensual">% mensual</option>
+                                            <option value="diaria360">% diaria (año 360)</option>
+                                            <option value="diaria365">% diaria (año 365)</option>
+                                        </select>
+                                    </div>
+                                    <div class="small-label">
+                                        Ej: si dice “18% anual”, escribe 18 y elige “% anual”.
+                                        Si dice “2% mensual”, escribe 2 y elige “% mensual”.
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
+
+                                <!-- Tiempo -->
+                                <div class="col-12 mt-2">
                                     <label class="form-label">Tiempo hasta el vencimiento (t)</label>
-                                    <input type="number" id="tDesc"
-                                           min="0" step="0.0001"
-                                           class="form-control"
-                                           placeholder="Ej: 2 (meses), 90 (días)" />
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Unidad de tiempo</label>
-                                    <select id="unidadDesc" class="form-select">
-                                        <option value="anios">Años (t en años)</option>
-                                        <option value="meses">Meses (t en meses / 12)</option>
-                                        <option value="dias360">Días (año comercial 360)</option>
-                                        <option value="dias365">Días (año real 365)</option>
-                                    </select>
+                                    <div class="row g-1">
+                                        <div class="col-4">
+                                            <input type="number" min="0" step="1"
+                                                id="tDescAnos" class="form-control"
+                                                placeholder="Años" />
+                                        </div>
+                                        <div class="col-4">
+                                            <input type="number" min="0" step="1"
+                                                id="tDescMeses" class="form-control"
+                                                placeholder="Meses" />
+                                        </div>
+                                        <div class="col-4">
+                                            <input type="number" min="0" step="1"
+                                                id="tDescDias" class="form-control"
+                                                placeholder="Días (360)" />
+                                        </div>
+                                    </div>
+                                    <div class="small-label">
+                                        Llena solo lo que necesites.  
+                                        Ej: 3 meses → 0 años, 3 meses, 0 días.  
+                                        Para días se usa año comercial de 360 días.
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -306,6 +367,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <footer class="text-center footer-text">

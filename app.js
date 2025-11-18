@@ -1,6 +1,36 @@
 // ==========================
 //  UTILIDADES GENERALES
 // ==========================
+function tiempoDesglosadoAnios(anios, meses, dias) {
+    var a = Number(anios);
+    var m = Number(meses);
+    var d = Number(dias);
+
+    if (isNaN(a)) a = 0;
+    if (isNaN(m)) m = 0;
+    if (isNaN(d)) d = 0;
+
+    // Usamos año comercial de 360 días
+    return a + (m / 12) + (d / 360);
+}
+
+function tasaAPeriodoAnual(valorPorciento, periodo) {
+    var r = Number(valorPorciento);
+    if (isNaN(r) || r < 0) return NaN;
+
+    var dec = r / 100;
+
+    switch (periodo) {
+        case "anual":      return dec;
+        case "semestral":  return dec * 2;     // 2 semestres por año
+        case "trimestral": return dec * 4;     // 4 trimestres
+        case "mensual":    return dec * 12;    // 12 meses
+        case "diaria360":  return dec * 360;   // 360 días
+        case "diaria365":  return dec * 365;   // 365 días
+        default:           return dec;
+    }
+}
+
 function toYears(valor, unidad) {
     var t = Number(valor);
     if (isNaN(t) || t < 0) return NaN;
@@ -32,6 +62,12 @@ function setDisabled(id, disabled) {
     }
 }
 
+function setDisabledTiempo(disabled) {
+    ["tAnos","tMeses","tDias"].forEach(function(id){
+        setDisabled(id, disabled);
+    });
+}
+
 // ==========================
 //  LÓGICA AL CARGAR LA PÁGINA
 // ==========================
@@ -50,8 +86,8 @@ document.addEventListener("DOMContentLoaded", function () {
             setDisabled("capitalInput", false);
             setDisabled("montoInput", false);
             setDisabled("interesInput", false);
-            setDisabled("tasaInput", false);
-            setDisabled("tiempoInput", false);
+            setDisabled("tasaValor", false);
+            setDisabledTiempo(false);
 
             // Luego deshabilitamos según el tipo a calcular
             switch (tipo) {
@@ -74,14 +110,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     break;
 
                 case "tasa":
-                    // Calcular i => NO escribo i ni I
-                    setDisabled("tasaInput", true);
+                    // Calcular i => NO escribo tasa ni I
+                    setDisabled("tasaValor", true);
                     setDisabled("interesInput", true);
                     break;
 
                 case "tiempo":
                     // Calcular t => NO escribo t ni I
-                    setDisabled("tiempoInput", true);
+                    setDisabledTiempo(true);
                     setDisabled("interesInput", true);
                     break;
             }
@@ -107,9 +143,15 @@ document.addEventListener("DOMContentLoaded", function () {
             var C = parseFloat(document.getElementById("capitalInput").value);
             var M = parseFloat(document.getElementById("montoInput").value);
             var I = parseFloat(document.getElementById("interesInput").value);
-            var iPercent = parseFloat(document.getElementById("tasaInput").value);
-            var tInput = parseFloat(document.getElementById("tiempoInput").value);
-            var unidad = document.getElementById("unidadTiempo").value;
+
+            var tasaValor = parseFloat(document.getElementById("tasaValor").value);
+            var tasaPeriodo = document.getElementById("tasaPeriodo").value;
+            var i = tasaAPeriodoAnual(tasaValor, tasaPeriodo); // decimal anual
+
+            var tA = parseFloat(document.getElementById("tAnos").value);
+            var tM = parseFloat(document.getElementById("tMeses").value);
+            var tD = parseFloat(document.getElementById("tDias").value);
+            var t = tiempoDesglosadoAnios(tA, tM, tD);
 
             var resultBox = document.getElementById("resultadoInteres");
             var detalleBox = document.getElementById("detalleFormulaInteres");
@@ -117,16 +159,11 @@ document.addEventListener("DOMContentLoaded", function () {
             resultBox.classList.add("d-none");
             if (detalleBox) detalleBox.innerText = "";
 
-            // Convertimos tasa en decimal anual
-            var i = isNaN(iPercent) ? NaN : iPercent / 100;
-            // Convertimos tiempo a años según unidad
-            var t = toYears(tInput, unidad);
-
             try {
                 switch (tipo) {
                     case "monto":
-                        if (isNaN(C) || isNaN(i) || isNaN(t)) {
-                            throw "Para calcular el monto (M) necesitas Capital (C), Tasa (i) y Tiempo (t).";
+                        if (isNaN(C) || isNaN(i) || isNaN(t) || t <= 0) {
+                            throw "Para calcular el monto (M) necesitas Capital (C), Tasa y Tiempo.";
                         }
                         I = C * i * t;
                         M = C + I;
@@ -136,8 +173,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         break;
 
                     case "capital":
-                        if (isNaN(M) || isNaN(i) || isNaN(t)) {
-                            throw "Para calcular el capital (C) necesitas Monto (M), Tasa (i) y Tiempo (t).";
+                        if (isNaN(M) || isNaN(i) || isNaN(t) || t <= 0) {
+                            throw "Para calcular el capital (C) necesitas Monto (M), Tasa y Tiempo.";
                         }
                         C = M / (1 + i * t);
                         I = M - C;
@@ -147,8 +184,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         break;
 
                     case "interes":
-                        if (isNaN(C) || isNaN(i) || isNaN(t)) {
-                            throw "Para calcular el interés (I) necesitas Capital (C), Tasa (i) y Tiempo (t).";
+                        if (isNaN(C) || isNaN(i) || isNaN(t) || t <= 0) {
+                            throw "Para calcular el interés (I) necesitas Capital (C), Tasa y Tiempo.";
                         }
                         I = C * i * t;
                         M = C + I;
@@ -158,11 +195,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         break;
 
                     case "tasa":
-                        if (isNaN(C) || isNaN(M) || isNaN(t)) {
+                        if (isNaN(C) || isNaN(M) || isNaN(t) || t <= 0) {
                             throw "Para calcular la tasa (i) necesitas Capital (C), Monto (M) y Tiempo (t).";
                         }
                         i = (M / C - 1) / t;
-                        iPercent = i * 100;
                         I = M - C;
                         detalleBox.innerText =
                             "i = (M / C − 1) / t\n" +
@@ -170,11 +206,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         break;
 
                     case "tiempo":
-                        if (isNaN(C) || isNaN(M) || isNaN(i)) {
+                        if (isNaN(C) || isNaN(M) || isNaN(i) || i <= 0) {
                             throw "Para calcular el tiempo (t) necesitas Capital (C), Monto (M) y Tasa (i).";
                         }
                         t = (M / C - 1) / i;
-                        tInput = t; // en años
                         I = M - C;
                         detalleBox.innerText =
                             "t = (M / C − 1) / i\n" +
@@ -202,7 +237,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 resultBox.classList.remove("d-none");
 
-                // Mensaje de éxito suave (opcional)
                 Swal.fire({
                     icon: "success",
                     title: "Cálculo realizado",
@@ -220,7 +254,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         btnLimpiarInteres.addEventListener("click", function () {
-            ["capitalInput","montoInput","interesInput","tasaInput","tiempoInput"].forEach(function(id) {
+            ["capitalInput","montoInput","interesInput","tasaValor",
+             "tAnos","tMeses","tDias"].forEach(function(id) {
                 var el = document.getElementById(id);
                 if (el && !el.disabled) {
                     el.value = "";
@@ -240,10 +275,17 @@ document.addEventListener("DOMContentLoaded", function () {
     if (btnCalcularDescuento && btnLimpiarDescuento) {
         btnCalcularDescuento.addEventListener("click", function () {
             var tipo = document.getElementById("tipoDescuento").value;
+
             var M = parseFloat(document.getElementById("MDesc").value);
-            var dPercent = parseFloat(document.getElementById("dDesc").value);
-            var tInput = parseFloat(document.getElementById("tDesc").value);
-            var unidad = document.getElementById("unidadDesc").value;
+
+            var dValor = parseFloat(document.getElementById("dDescValor").value);
+            var dPeriodo = document.getElementById("dDescPeriodo").value;
+            var d = tasaAPeriodoAnual(dValor, dPeriodo); // descuento anual (decimal)
+
+            var tA = parseFloat(document.getElementById("tDescAnos").value);
+            var tM = parseFloat(document.getElementById("tDescMeses").value);
+            var tD = parseFloat(document.getElementById("tDescDias").value);
+            var t = tiempoDesglosadoAnios(tA, tM, tD);   // tiempo en años
 
             var resultBox = document.getElementById("resultadoDescuento");
             var detalleBox = document.getElementById("detalleFormulaDescuento");
@@ -251,14 +293,11 @@ document.addEventListener("DOMContentLoaded", function () {
             resultBox.classList.add("d-none");
             if (detalleBox) detalleBox.innerText = "";
 
-            var d = isNaN(dPercent) ? NaN : dPercent / 100;
-            var t = toYears(tInput, unidad);
-
-            if (isNaN(M) || isNaN(d) || isNaN(t)) {
+            if (isNaN(M) || isNaN(d) || isNaN(t) || t <= 0) {
                 Swal.fire({
                     icon: "warning",
                     title: "Faltan datos",
-                    text: "Completa M, d y t para calcular el descuento."
+                    text: "Completa M, d y t correctamente para calcular el descuento."
                 });
                 return;
             }
@@ -300,7 +339,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         btnLimpiarDescuento.addEventListener("click", function () {
-            ["MDesc","dDesc","tDesc"].forEach(function(id) {
+            ["MDesc","dDescValor","tDescAnos","tDescMeses","tDescDias"].forEach(function(id) {
                 var el = document.getElementById(id);
                 if (el) el.value = "";
             });
@@ -309,3 +348,4 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
