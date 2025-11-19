@@ -57,20 +57,12 @@
 
     <!-- Encabezado -->
     <section class="hero shadow-sm mb-3">
-        <div class="row align-items-center">
-            <div class="col-md-8">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8 text-center">
                 <h1>Calculadora de Interés Simple</h1>
                 <p>
                     Calcula <strong>monto, capital, interés, tasa y tiempo</strong>,
                     además de <strong>descuento simple comercial y real</strong>.
-                </p>
-            </div>
-            <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                <span class="badge bg-soft">
-                    Asignatura: Ingeniería Económica
-                </span>
-                <p class="small-label mt-2 mb-0">
-                    Usa esta herramienta como apoyo para tus ejercicios e informe.
                 </p>
             </div>
         </div>
@@ -81,13 +73,13 @@
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="tab-interes" data-bs-toggle="tab"
                     data-bs-target="#pane-interes" type="button" role="tab">
-                Interés Simple (M, C, I, i, t)
+                Interés Simple
             </button>
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="tab-descuento" data-bs-toggle="tab"
                     data-bs-target="#pane-descuento" type="button" role="tab">
-                Descuento Simple (Comercial / Real)
+                Descuento Simple
             </button>
         </li>
 
@@ -102,231 +94,251 @@
 
     <div class="tab-content" id="mainTabsContent">
         <!-- Pestaña 1: Interés simple -->
-<div class="tab-pane fade show active" id="pane-interes" role="tabpanel">
+        <div class="tab-pane fade show active" id="pane-interes" role="tabpanel">
 
-    <div class="card shadow-soft mb-3">
-        <div class="card-body color_txt1">
-            <h5 class="card-title">Calculadora de Interés Simple</h5>
-            <p class="card-text small text-muted">
-                Fórmulas base (con tiempo en años):
-            </p>
-            <div class="formula-box mb-3">
-                M = C (1 + i · t)  <br>  I = C · i · t  |  
-                i = (M / C − 1) / t  <br>  t = (M / C − 1) / i
-            </div>
+            <div class="card shadow-soft mb-3">
+                <div class="card-body color_txt1">
+                    <h5 class="card-title">Calculadora de Interés Simple</h5>
+                    <p class="card-text small text-muted">
+                        Fórmulas base (con tiempo en años):
+                    </p>
+                    <div class="formula-box mb-3">
+                        <strong>Monto (M):</strong>
+                        M = C (1 + i · t)
 
-            <div class="row g-3">
-                <!-- Selección de variable a calcular -->
-                <div class="col-md-4 ">
-                    <label for="tipoCalculo" class="form-label">
-                        ¿Qué deseas calcular?
-                    </label>
-                    <select id="tipoCalculo" class="form-select color_txt1">
-                        <option value="monto">Monto (M)</option>
-                        <option value="capital">Capital (C)</option>
-                        <option value="interes">Interés (I)</option>
-                        <option value="tasa">Tasa (i)</option>
-                        <option value="tiempo">Tiempo (t)</option>
-                    </select>
-                    <div class="small-label mt-2">
-                        Los campos bloqueados son los que el programa calcula por ti.
+                        <strong>Interés (I):</strong>
+                        I = C · i · t
+
+                        <strong>Tasa simple (i):</strong>
+                        i = (M / C − 1) / t
+
+                        <strong>Tiempo (t):</strong>
+                        t = (M / C − 1) / i
                     </div>
-                </div>
 
-                <!-- Datos de entrada -->
-                <div class="col-md-8">
-                    <div class="row g-2">
-                        <!-- Capital, Monto e Interés -->
-                        <div class="col-md-6">
-                            <label class="form-label">Capital inicial (C)</label>
-                            <input type="number" min="0" step="0.01"
-                                id="capitalInput" class="form-control"
-                                placeholder="Ej: 50000" />
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Monto final (M)</label>
-                            <input type="number" min="0" step="0.01"
-                                id="montoInput" class="form-control"
-                                placeholder="Ej: 58500" />
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Interés total (I)</label>
-                            <input type="number" min="0" step="0.01"
-                                id="interesInput" class="form-control"
-                                placeholder="Ej: 8500" />
-                        </div>
-
-                        <!-- Tasa -->
-                        <div class="col-md-6">
-                            <label class="form-label">
-                                Tasa simple pactada
+                    <div class="row g-3">
+                        <!-- Selección de variable a calcular -->
+                        <div class="col-md-4 ">
+                            <label for="tipoCalculo" class="form-label">
+                                ¿Qué deseas calcular?
                             </label>
-                            <div class="input-group">
-                                <input type="number" min="0" step="0.0001"
-                                    id="tasaValor" class="form-control"
-                                    placeholder="Ej: 12" />
-                                <span class="input-group-text">%</span>
-                                <select id="tasaPeriodo" class="form-select color_txt1">
-                                    <option value="anual">% anual</option>
-                                    <option value="semestral">% semestral</option>
-                                    <option value="trimestral">% trimestral</option>
-                                    <option value="mensual">% mensual</option>
-                                    <option value="diaria360">% diaria (año 360)</option>
-                                    <option value="diaria365">% diaria (año 365)</option>
-                                </select>
-                            </div>
-                            <div class="small-label">
-                                Ej: si dice “1.5% mensual”, escribe 1.5 y elige “% mensual”.
+                            <select id="tipoCalculo" class="form-select color_txt1">
+                                <option value="monto">Monto (M)</option>
+                                <option value="capital">Capital (C)</option>
+                                <option value="interes">Interés (I)</option>
+                                <option value="tasa">Tasa (i)</option>
+                                <option value="tiempo">Tiempo (t)</option>
+                            </select>
+                            <div class="small-label mt-2">
+                                Los campos bloqueados son los que el programa calcula por ti.
                             </div>
                         </div>
 
-                        <!-- Tiempo manual -->
-                        <div class="col-12 mt-2">
-                            <label class="form-label">Tiempo total (t) (modo manual)</label>
-                            <div class="row g-1">
-                                <div class="col-4">
-                                    <input type="number" min="0" step="1"
-                                        id="tAnos" class="form-control"
-                                        placeholder="Años" />
-                                </div>
-                                <div class="col-4">
-                                    <input type="number" min="0" step="1"
-                                        id="tMeses" class="form-control"
-                                        placeholder="Meses" />
-                                </div>
-                                <div class="col-4">
-                                    <input type="number" min="0" step="1"
-                                        id="tDias" class="form-control"
-                                        placeholder="Días (360)" />
-                                </div>
-                            </div>
-                            <div class="small-label">
-                                Llena solo lo que necesites.  
-                                Ej: 1 año y medio → 1 año, 6 meses, 0 días.  
-                                Para días se usa año comercial de 360 días.
-                            </div>
-                        </div>
-
-                        <!-- Modo de captura de tiempo -->
-                        <div class="col-12 mt-3">
-                            <label class="form-label">¿Cómo quieres ingresar el tiempo?</label>
-                            <div class="d-flex flex-wrap gap-3 align-items-center">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio"
-                                           name="modoTiempo" id="modoTiempoManual"
-                                           value="manual" checked>
-                                    <label class="form-check-label" for="modoTiempoManual">
-                                        Años / meses / días (manual)
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio"
-                                           name="modoTiempo" id="modoTiempoFechas"
-                                           value="fechas">
-                                    <label class="form-check-label" for="modoTiempoFechas">
-                                        Entre dos fechas (calendario)
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tiempo por fechas -->
-                        <div class="col-12 mt-2" id="bloqueTiempoFechas">
+                        <!-- Datos de entrada -->
+                        <div class="col-md-8">
                             <div class="row g-2">
+                                <!-- Capital, Monto e Interés -->
                                 <div class="col-md-6">
-                                    <label class="form-label">Fecha inicial</label>
-                                    <input type="date" id="fechaInicio" class="form-control">
+                                    <label class="form-label">Capital inicial (C)</label>
+                                    <input type="number" min="0" step="0.01"
+                                        id="capitalInput" class="form-control"
+                                        placeholder="Ej: 50000" />
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Fecha final</label>
-                                    <input type="date" id="fechaFin" class="form-control">
+                                    <label class="form-label">Monto final (M)</label>
+                                    <input type="number" min="0" step="0.01"
+                                        id="montoInput" class="form-control"
+                                        placeholder="Ej: 58500" />
                                 </div>
-                            </div>
-                            <div class="small-label mt-1 color_txt1">
-                                El programa calcula el tiempo entre las dos fechas:  
-                                <strong>tiempo real</strong> (base 365 días) y 
-                                <strong>tiempo aproximado</strong> (base 360 días).  
-                                Si no llenas ambas fechas, se usará el tiempo manual en años/meses/días.
+                                <div class="col-md-6">
+                                    <label class="form-label">Interés total (I)</label>
+                                    <input type="number" min="0" step="0.01"
+                                        id="interesInput" class="form-control"
+                                        placeholder="Ej: 8500" />
+                                </div>
+
+                                <!-- Tasa -->
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        Tasa simple pactada
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="number" min="0" step="0.0001"
+                                            id="tasaValor" class="form-control"
+                                            placeholder="Ej: 12" />
+                                        <span class="input-group-text">%</span>
+                                        <select id="tasaPeriodo" class="form-select color_txt1">
+                                            <option value="anual">% anual</option>
+                                            <option value="semestral">% semestral</option>
+                                            <option value="trimestral">% trimestral</option>
+                                            <option value="mensual">% mensual</option>
+                                            <option value="diaria360">% diaria (año 360)</option>
+                                            <option value="diaria365">% diaria (año 365)</option>
+                                        </select>
+                                    </div>
+                                    <div class="small-label">
+                                        Ej: si dice “1.5% mensual”, escribe 1.5 y elige “% mensual”.
+                                    </div>
+                                </div>
+
+                                <!-- Tiempo manual -->
+                                <div class="col-12 mt-2">
+                                    <label class="form-label">Tiempo total (t) (modo manual)</label>
+                                    <div class="row g-1">
+                                        <div class="col-4">
+                                            <input type="number" min="0" step="1"
+                                                id="tAnos" class="form-control"
+                                                placeholder="Años" />
+                                        </div>
+                                        <div class="col-4">
+                                            <input type="number" min="0" step="1"
+                                                id="tMeses" class="form-control"
+                                                placeholder="Meses" />
+                                        </div>
+                                        <div class="col-4">
+                                            <input type="number" min="0" step="1"
+                                                id="tDias" class="form-control"
+                                                placeholder="Días (360)" />
+                                        </div>
+                                    </div>
+                                    <div class="small-label">
+                                        Llena solo lo que necesites.  
+                                        Ej: 1 año y medio → 1 año, 6 meses, 0 días.  
+                                        Para días se usa año comercial de 360 días.
+                                    </div>
+                                </div>
+
+                                <!-- Modo de captura de tiempo -->
+                                <div class="col-12 mt-3">
+                                    <label class="form-label">¿Cómo quieres ingresar el tiempo?</label>
+                                    <div class="d-flex flex-wrap gap-3 align-items-center">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio"
+                                                name="modoTiempo" id="modoTiempoManual"
+                                                value="manual" checked>
+                                            <label class="form-check-label" for="modoTiempoManual">
+                                                Años / meses / días (manual)
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio"
+                                                name="modoTiempo" id="modoTiempoFechas"
+                                                value="fechas">
+                                            <label class="form-check-label" for="modoTiempoFechas">
+                                                Entre dos fechas (calendario)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tiempo por fechas -->
+                                <div class="col-12 mt-2" id="bloqueTiempoFechas">
+                                    <div class="row g-2">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Fecha inicial</label>
+                                            <input type="date" id="fechaInicio" class="form-control">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Fecha final</label>
+                                            <input type="date" id="fechaFin" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="small-label mt-1 color_txt1">
+                                        El programa calcula el tiempo entre las dos fechas:  
+                                        <strong>tiempo real</strong> (base 365 días) y 
+                                        <strong>tiempo aproximado</strong> (base 360 días).  
+                                        Si no llenas ambas fechas, se usará el tiempo manual en años/meses/días.
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
+                    </div>
 
+                    <hr class="my-3">
+
+                    <div class="d-flex justify-content-center gap-2">
+                        <button class="btn boton-calculadora btn-soft" id="btnCalcularInteres">
+                            Calcular
+                        </button>
+                        <button class="btn btn-limpiar btn-soft" id="btnLimpiarInteres">
+                            Limpiar
+                        </button>
+                    </div>
+
+                    <!-- Mensajes y resultados -->
+                    <div id="alertInteres" class="alert alert-warning mt-3 d-none"></div>
+
+                    <div id="resultadoInteres" class="mt-3 d-none">
+                        <h6>Resultados:</h6>
+                        <ul class="list-group mb-2">
+                            <li class="list-group-item">
+                                <strong>Capital (C):</strong> <span id="resCapital"></span>
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Monto (M):</strong> <span id="resMonto"></span>
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Interés (I):</strong> <span id="resInteres"></span>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
+                                    <strong class="me-2">Tasa simple equivalente:</strong>
+                                    <span id="resTasa" class="fw-semibold"></span>
+                                    <div class="ms-sm-auto">
+                                        <select id="resTasaPeriodo" class="form-select form-select-sm w-auto">
+                                            <option value="anual">% anual</option>
+                                            <option value="semestral">% semestral</option>
+                                            <option value="trimestral">% trimestral</option>
+                                            <option value="mensual">% mensual</option>
+                                            <option value="diaria360">% diaria (360)</option>
+                                            <option value="diaria365">% diaria (365)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="small-label mt-1">
+                                    La tasa se calcula como anual. Aquí puedes ver su equivalente en otros periodos.
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Tiempo (t en años):</strong> <span id="resTiempoAnios"></span>
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Tiempo aproximado:</strong>
+                                <span id="resTiempoDesglosado"></span>
+                            </li>
+                        </ul>
+
+                        <div class="formula-box" id="detalleFormulaInteres"></div>
                     </div>
                 </div>
-            </div>
-
-            <hr class="my-3">
-
-            <div class="d-flex gap-2">
-                <button class="btn boton-calculadora btn-soft" id="btnCalcularInteres">
-                    Calcular
-                </button>
-                <button class="btn btn-outline-secondary btn-soft" id="btnLimpiarInteres">
-                    Limpiar
-                </button>
-            </div>
-
-            <!-- Mensajes y resultados -->
-            <div id="alertInteres" class="alert alert-warning mt-3 d-none"></div>
-
-            <div id="resultadoInteres" class="mt-3 d-none">
-                <h6>Resultados:</h6>
-                <ul class="list-group mb-2">
-                    <li class="list-group-item">
-                        <strong>Capital (C):</strong> <span id="resCapital"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Monto (M):</strong> <span id="resMonto"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Interés (I):</strong> <span id="resInteres"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
-                            <strong class="me-2">Tasa simple equivalente:</strong>
-                            <span id="resTasa" class="fw-semibold"></span>
-                            <div class="ms-sm-auto">
-                                <select id="resTasaPeriodo" class="form-select form-select-sm w-auto">
-                                    <option value="anual">% anual</option>
-                                    <option value="semestral">% semestral</option>
-                                    <option value="trimestral">% trimestral</option>
-                                    <option value="mensual">% mensual</option>
-                                    <option value="diaria360">% diaria (360)</option>
-                                    <option value="diaria365">% diaria (365)</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="small-label mt-1">
-                            La tasa se calcula como anual. Aquí puedes ver su equivalente en otros periodos.
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Tiempo (t en años):</strong> <span id="resTiempoAnios"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Tiempo aproximado:</strong>
-                        <span id="resTiempoDesglosado"></span>
-                    </li>
-                </ul>
-
-                <div class="formula-box" id="detalleFormulaInteres"></div>
             </div>
         </div>
-    </div>
-</div>
 
-
-
-                <!-- ============================
+        <!-- ============================
             CALCULADORA DE DESCUENTO SIMPLE
         ============================= -->
         <div class="tab-pane fade" id="pane-descuento" role="tabpanel">
             <div class="card shadow-sm border-0 mt-3">
                 <div class="card-body color_txt2">
                     <h5 class="card-title mb-2">Calculadora de Descuento Simple</h5>
-                    <p class="text-muted small mb-3">
-                        <strong>Descuento comercial:</strong> D = M · d · t, C = M − D. <br>
-                        <strong>Descuento real (justo):</strong> M = C (1 + d · t), C = M / (1 + d · t), D = M − C.
+                    <p class="card-text small text-muted">
+                        Fórmulas base (con tiempo en años):
                     </p>
+                    <div class="formula-box mb-3">
+                    <strong>Descuento comercial:</strong>
+                    D = M · d · t
+                    C = M − D
+                    d = D / (M · t)
+                    t = D / (M · d)
+
+                    <strong>Descuento real (justo):</strong>
+                    M = C (1 + d · t)
+                    C = M / (1 + d · t)
+                    D = M − C
+                    d = (M / C − 1) / t
+                    t = (M / C − 1) / d
+                    </div>
 
                     <div class="row g-3">
                         <div class="col-md-4">
@@ -420,9 +432,9 @@
 
                     <hr class="my-3">
 
-                    <div class="d-flex gap-2">
+                    <div class="d-flex justify-content-center gap-2">
                         <button class="btn boton-calculadora btn-soft" id="btnCalcularDescuento">Calcular</button>
-                        <button class="btn btn-outline-secondary btn-soft" id="btnLimpiarDescuento">Limpiar</button>
+                        <button class="btn btn-limpiar btn-soft" id="btnLimpiarDescuento">Limpiar</button>
                     </div>
 
                     <!-- Resultados -->
@@ -504,7 +516,7 @@
                         <button type="button" class="btn btn-success btn-soft" id="btnCalcularEqv">
                             Calcular X
                         </button>
-                        <button type="button" class="btn btn-outline-secondary btn-soft" id="btnLimpiarEqv">
+                        <button type="button" class="btn btn-limpiar btn-soft" id="btnLimpiarEqv">
                             Limpiar
                         </button>
                     </div>
@@ -575,6 +587,20 @@
                 <img src="github2.png" alt="GitHub" class="footer-github-icon">
                 <span>Néstor</span>
             </a>
+
+            <a href="https://github.com/blackghossst"
+               target="_blank"
+               class="footer-dev-link">
+                <img src="github2.png" alt="GitHub" class="footer-github-icon">
+                <span>Vilma</span>
+            </a>
+
+            <a href="https://github.com/blackghossst"
+               target="_blank"
+               class="footer-dev-link">
+                <img src="github2.png" alt="GitHub" class="footer-github-icon">
+                <span>Madeline</span>
+            </a>
         </div>
     </div>
 
@@ -589,6 +615,6 @@
 <script src="app.js"></script>
 <script src="interes.js"></script>
 <script src="descuento.js"></script>
-<script src="equivalentes.js"></script> <!-- NUEVO -->
+<script src="equivalentes.js"></script> 
 </body>
 </html>
