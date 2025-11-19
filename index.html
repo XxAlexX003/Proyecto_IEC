@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8" />
     <title>Programa de Ingeniería Económica</title>
@@ -7,20 +8,16 @@
     <!-- Google Fonts (Poppins) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
 
     <!-- Bootstrap 5 -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Tus estilos -->
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <!-- NAVBAR -->
@@ -29,9 +26,8 @@
         <a class="navbar-brand fw-semibold" href="index.html">
             Ing. Económica
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarMain" aria-controls="navbarMain"
-                aria-expanded="false" aria-label="Mostrar navegación">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                aria-controls="navbarMain" aria-expanded="false" aria-label="Mostrar navegación">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -41,7 +37,7 @@
                     <a class="nav-link active-page" href="index.html">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="simple.html">Calculadora</a>
+                    <a class="nav-link" href="simple.html">Calcular</a>
                 </li>
             </ul>
         </div>
@@ -56,9 +52,10 @@
             <div class="col-md-8">
                 <h1>Programa de Ingeniería Económica</h1>
                 <p>
-                    Proyecto práctico de la asignatura <strong>Ingeniería Económica</strong>,
-                    enfocado en el estudio del <strong>Interés Simple</strong> y sus aplicaciones:
-                    cálculo de montos, capitales, intereses, tasas, tiempos y descuentos.
+                    Explora los conceptos clave de <strong>interés simple</strong>,
+                    <strong>descuento simple</strong> y
+                    <strong>ecuaciones de valores equivalentes</strong> con una
+                    calculadora interactiva pensada para tus ejercicios e informes.
                 </p>
             </div>
             <div class="col-md-4 text-md-end mt-3 mt-md-0">
@@ -66,94 +63,292 @@
                     Universidad de El Salvador
                 </span>
                 <div class="small-label mt-2">
-                    Facultad Multidisciplinaria Oriental – Ing. en Sistemas
+                    Facultad Multidisciplinaria Oriental – Ingeniería en Sistemas
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contenido principal -->
+    <!-- PRIMER ROW: tarjetas de conceptos a ancho completo -->
     <div class="row">
-        <div class="col-lg-8">
-            <div class="card shadow-soft mb-3">
-                <div class="card-body">
-                    <h4 class="card-title mb-3">¿De qué trata este programa?</h4>
-                    <p class="card-text">
-                        Esta herramienta digital permite resolver de forma rápida los
-                        ejercicios de <strong>interés simple</strong> trabajados en clase,
-                        facilitando el análisis de diferentes situaciones de inversión o
-                        financiamiento.
-                    </p>
-                    <ul class="list-check">
-                        <li>Cálculo del <strong>monto</strong> (M).</li>
-                        <li>Cálculo del <strong>capital</strong> o valor actual (C).</li>
-                        <li>Cálculo del <strong>interés</strong> generado (I).</li>
-                        <li>Determinación de la <strong>tasa simple</strong> (i).</li>
-                        <li>Cálculo del <strong>tiempo</strong> de la operación (t).</li>
-                    </ul>
-                    <p class="card-text mt-3">
-                        Además, incluye una sección para <strong>descuento simple</strong>
-                        (comercial y real), útil para analizar operaciones con pagarés o
-                        documentos que se descuentan antes de su vencimiento.
-                    </p>
-                </div>
-            </div>
+        <div class="col-lg-12">
 
-            <div class="card shadow-soft mb-3">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">Relación con la asignatura</h5>
-                    <p class="card-text">
-                        El programa integra los contenidos de la unidad de Interés Simple:
-                    </p>
-                    <ul class="list-dot">
-                        <li>Concepto de capital, interés y monto.</li>
-                        <li>Interés simple en función del tiempo
-                            (<em>años, meses y días</em>).</li>
-                        <li>Diferencia entre <strong>año real (365 días)</strong> y
-                            <strong>año comercial (360 días)</strong>.</li>
-                        <li>Descuento simple comercial y descuento simple real (justo).</li>
-                    </ul>
-                    <p class="card-text">
-                        La intención es que el estudiante pueda comprobar sus resultados,
-                        explorar distintos escenarios y utilizar la herramienta como apoyo
-                        en la elaboración del informe del trabajo práctico.
-                    </p>
+            <!-- INTERÉS SIMPLE -->
+            <section class="concept-section concept-section--interes mb-4">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h4 class="concept-section-title mb-0">
+                        Interés simple
+                    </h4>
+                    <span class="concept-section-pill">M, C, I, i, t</span>
                 </div>
-            </div>
+                <p class="small-label mb-3 color_fuente">
+                    Relación entre el capital, la tasa, el tiempo, el interés y el monto
+                    cuando los intereses se calculan solo sobre el capital inicial.
+                </p>
+                <div class="concept-grid">
+                    <!-- Capital -->
+                    <article class="concept-card">
+                        <div class="concept-pill small">Capital (C)</div>
+                        <h5 class="concept-title">¿Qué es el capital?</h5>
+                        <p class="concept-text">
+                            Es la <strong>cantidad inicial de dinero</strong> que se invierte o se presta.
+                            Es el punto de partida del cálculo: sobre él se aplica la tasa de interés.
+                        </p>
+                        <p class="concept-footnote">
+                            En las fórmulas de interés simple aparece como <strong>C</strong>.
+                        </p>
+                    </article>
+
+                    <!-- Monto -->
+                    <article class="concept-card">
+                        <div class="concept-pill small">Monto (M)</div>
+                        <h5 class="concept-title">¿Qué es el monto?</h5>
+                        <p class="concept-text">
+                            Es el <strong>valor final</strong> de la operación al terminar el tiempo pactado:
+                            incluye el capital más los intereses generados.
+                        </p>
+                        <p class="concept-footnote">
+                            En interés simple: <strong>M = C (1 + i · t)</strong>.
+                        </p>
+                    </article>
+
+                    <!-- Interés -->
+                    <article class="concept-card">
+                        <div class="concept-pill small">Interés (I)</div>
+                        <h5 class="concept-title">¿Qué es el interés?</h5>
+                        <p class="concept-text">
+                            Es la <strong>ganancia o costo</strong> por usar el dinero durante cierto tiempo.
+                            Es la diferencia entre el monto y el capital.
+                        </p>
+                        <p class="concept-footnote">
+                            En interés simple: <strong>I = C · i · t</strong>.
+                        </p>
+                    </article>
+
+                    <!-- Tasa -->
+                    <article class="concept-card">
+                        <div class="concept-pill small">Tasa (i)</div>
+                        <h5 class="concept-title">¿Qué es la tasa simple?</h5>
+                        <p class="concept-text">
+                            Es el <strong>porcentaje de interés</strong> que se aplica por unidad de tiempo
+                            (año, semestre, mes, etc.) sobre el capital.
+                        </p>
+                        <p class="concept-footnote">
+                            Se expresa como porcentaje anual, mensual, trimestral, etc.
+                        </p>
+                    </article>
+
+                    <!-- Tiempo -->
+                    <article class="concept-card">
+                        <div class="concept-pill small">Tiempo (t)</div>
+                        <h5 class="concept-title">¿Qué es el tiempo?</h5>
+                        <p class="concept-text">
+                            Es la <strong>duración de la operación financiera</strong>.
+                            En interés simple suele medirse en años, meses y días, usando año
+                            comercial (360) o año real (365), según el problema.
+                        </p>
+                        <p class="concept-footnote">
+                            En las fórmulas aparece como <strong>t</strong>.
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <!-- DESCUENTO SIMPLE -->
+            <section class="concept-section concept-section--descuento mb-4">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h4 class="concept-section-title mb-0">
+                        Descuento simple
+                    </h4>
+                    <span class="concept-section-pill">Comercial y real</span>
+                </div>
+                <p class="small-label mb-3 color_fuente">
+                    Se aplica cuando un documento por cobrar (pagaré, letra, factura)
+                    se liquida antes de su vencimiento.
+                </p>
+                <div class="concept-grid">
+                    <!-- Valor nominal -->
+                    <article class="concept-card">
+                        <div class="concept-pill small">Valor nominal (M)</div>
+                        <h5 class="concept-title">¿Qué es el valor nominal?</h5>
+                        <p class="concept-text">
+                            Es el <strong>importe que aparece en el documento</strong> y que se cobrará
+                            a la fecha de vencimiento si no se descuenta.
+                        </p>
+                        <p class="concept-footnote">
+                            Coincide con el monto futuro del documento.
+                        </p>
+                    </article>
+
+                    <!-- Valor actual -->
+                    <article class="concept-card">
+                        <div class="concept-pill small">Valor actual (C)</div>
+                        <h5 class="concept-title">¿Qué es el valor actual?</h5>
+                        <p class="concept-text">
+                            Es la <strong>cantidad que se recibe hoy</strong> al descontar el documento
+                            antes de su vencimiento. Siempre es menor que el valor nominal.
+                        </p>
+                        <p class="concept-footnote">
+                            Se llama también <strong>valor anticipado</strong>.
+                        </p>
+                    </article>
+
+                    <!-- Descuento -->
+                    <article class="concept-card">
+                        <div class="concept-pill small">Descuento (D)</div>
+                        <h5 class="concept-title">¿Qué es el descuento?</h5>
+                        <p class="concept-text">
+                            Es la <strong>diferencia entre el valor nominal y el valor actual</strong>.
+                            Representa lo que el banco o la entidad cobra por anticipar el pago.
+                        </p>
+                        <p class="concept-footnote">
+                            <strong>D = M − C</strong>.
+                        </p>
+                    </article>
+
+                    <!-- Comercial vs real -->
+                    <article class="concept-card">
+                        <div class="concept-pill small">Tipos de descuento</div>
+                        <h5 class="concept-title">Comercial vs real (justo)</h5>
+                        <p class="concept-text">
+                            En el <strong>descuento comercial</strong> se calcula D sobre el
+                            valor nominal: <strong>D = M · d · t</strong>.
+                            En el <strong>descuento real</strong> se descuenta como si fuera
+                            interés simple: <strong>C = M / (1 + d · t)</strong>.
+                        </p>
+                        <p class="concept-footnote">
+                            La calculadora permite trabajar con ambos tipos.
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <!-- ECUACIONES DE VALORES EQUIVALENTES -->
+            <section class="concept-section concept-section--equivalentes mb-4">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h4 class="concept-section-title mb-0">
+                        Ecuaciones de valores equivalentes
+                    </h4>
+                    <span class="concept-section-pill">Deudas y pagos</span>
+                </div>
+                <p class="small-label mb-3 color_fuente">
+                    Se usa para reemplazar un conjunto de deudas y pagos por otros
+                    equivalentes, todos medidos en una misma fecha llamada
+                    <strong>fecha focal</strong>.
+                </p>
+                <div class="concept-grid">
+                    <!-- Fecha focal -->
+                    <article class="concept-card">
+                        <div class="concept-pill small">Fecha focal</div>
+                        <h5 class="concept-title">¿Qué es la fecha focal?</h5>
+                        <p class="concept-text">
+                            Es la <strong>fecha elegida como referencia</strong> para comparar
+                            todos los valores. Las deudas y pagos se llevan a esa fecha usando
+                            interés simple.
+                        </p>
+                        <p class="concept-footnote">
+                            Puede ser hoy, la fecha de un pago, o la que indique el enunciado.
+                        </p>
+                    </article>
+
+                    <!-- Deudas -->
+                    <article class="concept-card">
+                        <div class="concept-pill small">Deudas</div>
+                        <h5 class="concept-title">¿Cómo se tratan las deudas?</h5>
+                        <p class="concept-text">
+                            Cada deuda se lleva a la fecha focal como un
+                            <strong>valor equivalente</strong> usando la tasa y el tiempo
+                            correspondiente, según esté antes o después de la fecha focal.
+                        </p>
+                        <p class="concept-footnote">
+                            Antes de la fecha focal se capitaliza; después se descuenta.
+                        </p>
+                    </article>
+
+                    <!-- Pagos -->
+                    <article class="concept-card">
+                        <div class="concept-pill small">Pagos</div>
+                        <h5 class="concept-title">¿Cómo se tratan los pagos?</h5>
+                        <p class="concept-text">
+                            Igual que las deudas, cada pago se transforma en su
+                            <strong>valor equivalente</strong> en la fecha focal para
+                            compararlo con las deudas.
+                        </p>
+                        <p class="concept-footnote">
+                            Se busca que deudas y pagos sean equivalentes en esa fecha.
+                        </p>
+                    </article>
+
+                    <!-- Ecuación -->
+                    <article class="concept-card">
+                        <div class="concept-pill small">Principio clave</div>
+                        <h5 class="concept-title">Ecuación de equivalencia</h5>
+                        <p class="concept-text">
+                            La condición principal es:
+                            <strong>Valor total de las deudas =
+                                Valor total de los pagos</strong>, todos expresados en la
+                            misma fecha focal.
+                        </p>
+                        <p class="concept-footnote">
+                            La calculadora resuelve la incógnita <strong>X</strong> a partir
+                            de esta igualdad.
+                        </p>
+                    </article>
+                </div>
+            </section>
         </div>
+    </div>
 
-        <!-- Columna lateral con botón -->
-        <div class="col-lg-4">
-            <div class="card shadow-soft mb-3">
-                <div class="card-body text-center">
-                    <h5 class="card-title mb-2">Acceder a la calculadora</h5>
+    <!-- BLOQUE FINAL: solo botón para ir a la calculadora -->
+    <div class="row mt-3 justify-content-center">
+        <div class="col-md-8 col-lg-6 mb-3">
+            <div class="card shadow-soft h-100 text-center">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">Acceder a la calculadora de intereses simple</h5>
                     <p class="card-text text-muted mb-3">
-                        Realiza todos los cálculos de interés simple y descuento simple
-                        en una sola interfaz.
+                        Realiza cálculos de interés simple, descuento simple
+                        y ecuaciones de valores equivalentes en una sola interfaz.
                     </p>
                     <a href="simple.html" class="btn btn-primary btn-lg btn-soft">
                         Abrir calculadora
                     </a>
                 </div>
             </div>
-
-            <div class="card shadow-soft">
-                <div class="card-body">
-                    <h6 class="card-title mb-2">Sugerencias de uso</h6>
-                    <ul class="small list-dot mb-0">
-                        <li>Lee con cuidado el enunciado del ejercicio.</li>
-                        <li>Identifica la variable a encontrar (M, C, I, i o t).</li>
-                        <li>Elige la unidad de tiempo correcta (años, meses o días).</li>
-                        <li>Registra las respuestas en tu informe junto con el procedimiento.</li>
-                    </ul>
-                </div>
-            </div>
         </div>
     </div>
 
-    <footer class="text-center footer-text">
-        Programa demostrativo ~ Ingeniería Económica ~ Tema: Interés Simple
-    </footer>
+<footer class="footer-wrapper">
+    <div class="footer-card shadow-soft">
+        <div class="footer-info">
+            <span class="footer-label">Proyecto desarrollado por</span>
+        </div>
+
+        <div class="footer-devs">
+            <!-- Dev 1 -->
+            <a href="https://github.com/arianaSedi"
+               target="_blank"
+               class="footer-dev-link">
+                <img src="github2.png" alt="GitHub" class="footer-github-icon">
+                <span>Ariana</span>
+            </a>
+
+            <!-- Dev 2 -->
+            <a href="https://github.com/XxAlexX003"
+               target="_blank"
+               class="footer-dev-link">
+                <img src="github2.png" alt="GitHub" class="footer-github-icon">
+                <span>Alejandro</span>
+            </a>
+
+            <!-- Agrega más si los necesitas -->
+        </div>
+    </div>
+
+    <div class="text-center footer-text mt-3">
+        Programa demostrativo ~ Ingeniería Económica ~ Interés Simple, Descuento Simple y Valores Equivalentes
+    </div>
+</footer>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -163,8 +358,6 @@
 <script src="app.js"></script>
 <script src="interes.js"></script>
 <script src="descuento.js"></script>
-</body>
-</html>
-
+<script src="equivalentes.js"></script>
 </body>
 </html>
