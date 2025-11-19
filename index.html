@@ -82,8 +82,7 @@
                     <span class="concept-section-pill">M, C, I, i, t</span>
                 </div>
                 <p class="small-label mb-3 color_fuente">
-                    Relación entre el capital, la tasa, el tiempo, el interés y el monto
-                    cuando los intereses se calculan solo sobre el capital inicial.
+El interés simple calcula los intereses únicamente sobre el capital inicial, sin reinversión de intereses.
                 </p>
                 <div class="concept-grid">
                     <!-- Capital -->
@@ -92,7 +91,7 @@
                         <h5 class="concept-title">¿Qué es el capital?</h5>
                         <p class="concept-text">
                             Es la <strong>cantidad inicial de dinero</strong> que se invierte o se presta.
-                            Es el punto de partida del cálculo: sobre él se aplica la tasa de interés.
+                            Sobre él se aplica la tasa de interés.
                         </p>
                         <p class="concept-footnote">
                             En las fórmulas de interés simple aparece como <strong>C</strong>.
@@ -104,7 +103,7 @@
                         <div class="concept-pill small">Monto (M)</div>
                         <h5 class="concept-title">¿Qué es el monto?</h5>
                         <p class="concept-text">
-                            Es el <strong>valor final</strong> de la operación al terminar el tiempo pactado:
+                            Es el <strong>valor final</strong> de la operación al terminar el tiempo pactado,
                             incluye el capital más los intereses generados.
                         </p>
                         <p class="concept-footnote">
@@ -131,10 +130,10 @@
                         <h5 class="concept-title">¿Qué es la tasa simple?</h5>
                         <p class="concept-text">
                             Es el <strong>porcentaje de interés</strong> que se aplica por unidad de tiempo
-                            (año, semestre, mes, etc.) sobre el capital.
+                            (año, mes, etc.) sobre el capital.
                         </p>
                         <p class="concept-footnote">
-                            Se expresa como porcentaje anual, mensual, trimestral, etc.
+                            Se expresa como porcentaje anual, mensual, etc.
                         </p>
                     </article>
 
@@ -145,7 +144,7 @@
                         <p class="concept-text">
                             Es la <strong>duración de la operación financiera</strong>.
                             En interés simple suele medirse en años, meses y días, usando año
-                            comercial (360) o año real (365), según el problema.
+                            aproximado (360) o año real (365), según el problema dado.
                         </p>
                         <p class="concept-footnote">
                             En las fórmulas aparece como <strong>t</strong>.
@@ -168,15 +167,16 @@
                 </p>
                 <div class="concept-grid">
                     <!-- Valor nominal -->
+                    <!-- Valor nominal -->
                     <article class="concept-card">
                         <div class="concept-pill small">Valor nominal (M)</div>
                         <h5 class="concept-title">¿Qué es el valor nominal?</h5>
                         <p class="concept-text">
-                            Es el <strong>importe que aparece en el documento</strong> y que se cobrará
-                            a la fecha de vencimiento si no se descuenta.
+                            Es el <strong>importe que aparece escrito en el documento</strong> y que se cobrará
+                            en la fecha de vencimiento si no se aplica ningún descuento.
                         </p>
                         <p class="concept-footnote">
-                            Coincide con el monto futuro del documento.
+                            Corresponde al <strong>monto futuro</strong> del documento.
                         </p>
                     </article>
 
@@ -185,23 +185,26 @@
                         <div class="concept-pill small">Valor actual (C)</div>
                         <h5 class="concept-title">¿Qué es el valor actual?</h5>
                         <p class="concept-text">
-                            Es la <strong>cantidad que se recibe hoy</strong> al descontar el documento
-                            antes de su vencimiento. Siempre es menor que el valor nominal.
+                            Es la <strong>cantidad que se recibe hoy</strong> al descontar un documento antes 
+                            de su vencimiento. Siempre es menor que el valor nominal.
                         </p>
                         <p class="concept-footnote">
-                            Se llama también <strong>valor anticipado</strong>.
+                            También se conoce como <strong>valor anticipado</strong>.
                         </p>
                     </article>
+
 
                     <!-- Descuento -->
                     <article class="concept-card">
                         <div class="concept-pill small">Descuento (D)</div>
                         <h5 class="concept-title">¿Qué es el descuento?</h5>
                         <p class="concept-text">
-                            Es la <strong>diferencia entre el valor nominal y el valor actual</strong>.
-                            Representa lo que el banco o la entidad cobra por anticipar el pago.
+                            Es la <strong>reducción aplicada al valor nominal</strong> cuando un documento 
+                            se cobra antes de su fecha de vencimiento. Representa el costo del adelanto 
+                            que cobra la entidad financiera.
                         </p>
                         <p class="concept-footnote">
+                            Se obtiene como la diferencia entre el valor nominal y valor actual: 
                             <strong>D = M − C</strong>.
                         </p>
                     </article>
@@ -209,17 +212,16 @@
                     <!-- Comercial vs real -->
                     <article class="concept-card">
                         <div class="concept-pill small">Tipos de descuento</div>
-                        <h5 class="concept-title">Comercial vs real (justo)</h5>
+                        <h5 class="concept-title">Descuento comercial vs. real</h5>
                         <p class="concept-text">
-                            En el <strong>descuento comercial</strong> se calcula D sobre el
-                            valor nominal: <strong>D = M · d · t</strong>.
-                            En el <strong>descuento real</strong> se descuenta como si fuera
-                            interés simple: <strong>C = M / (1 + d · t)</strong>.
-                        </p>
-                        <p class="concept-footnote">
-                            La calculadora permite trabajar con ambos tipos.
+                            El <strong>descuento comercial</strong> calcula D sobre el valor nominal:
+                            <strong>D = M · d · t</strong>. <br> 
+                            El <strong>descuento real</strong> obtiene el valor actual como en interés simple:
+                            <strong>C = M / (1 + d · t)</strong>.
                         </p>
                     </article>
+
+
                 </div>
             </section>
 
@@ -242,12 +244,11 @@
                         <div class="concept-pill small">Fecha focal</div>
                         <h5 class="concept-title">¿Qué es la fecha focal?</h5>
                         <p class="concept-text">
-                            Es la <strong>fecha elegida como referencia</strong> para comparar
-                            todos los valores. Las deudas y pagos se llevan a esa fecha usando
-                            interés simple.
+                            Es la <strong>fecha de referencia</strong> a la que se trasladan todas las deudas 
+                            y pagos para poder compararlos usando interés simple.
                         </p>
                         <p class="concept-footnote">
-                            Puede ser hoy, la fecha de un pago, o la que indique el enunciado.
+                            Puede ser hoy, una fecha de pago o la indicada por el problema.
                         </p>
                     </article>
 
@@ -256,12 +257,11 @@
                         <div class="concept-pill small">Deudas</div>
                         <h5 class="concept-title">¿Cómo se tratan las deudas?</h5>
                         <p class="concept-text">
-                            Cada deuda se lleva a la fecha focal como un
-                            <strong>valor equivalente</strong> usando la tasa y el tiempo
-                            correspondiente, según esté antes o después de la fecha focal.
+                            Cada deuda se convierte a su <strong>valor equivalente</strong> en la fecha focal, 
+                            capitalizándola si ocurre antes o descontándola si ocurre después.
                         </p>
                         <p class="concept-footnote">
-                            Antes de la fecha focal se capitaliza; después se descuenta.
+                            Todo se expresa en una sola fecha para poder compararlo.
                         </p>
                     </article>
 
@@ -270,30 +270,27 @@
                         <div class="concept-pill small">Pagos</div>
                         <h5 class="concept-title">¿Cómo se tratan los pagos?</h5>
                         <p class="concept-text">
-                            Igual que las deudas, cada pago se transforma en su
-                            <strong>valor equivalente</strong> en la fecha focal para
-                            compararlo con las deudas.
+                            Igual que las deudas, cada pago se lleva a la fecha focal como un 
+                            <strong>valor equivalente</strong> para compararlo directamente.
                         </p>
                         <p class="concept-footnote">
-                            Se busca que deudas y pagos sean equivalentes en esa fecha.
+                            Así se determina si los pagos cubren las deudas.
                         </p>
                     </article>
 
-                    <!-- Ecuación -->
+                    <!-- Ecuación de equivalencia -->
                     <article class="concept-card">
                         <div class="concept-pill small">Principio clave</div>
                         <h5 class="concept-title">Ecuación de equivalencia</h5>
                         <p class="concept-text">
-                            La condición principal es:
-                            <strong>Valor total de las deudas =
-                                Valor total de los pagos</strong>, todos expresados en la
-                            misma fecha focal.
+                            Se cumple cuando el <strong>valor total de las deudas</strong> es igual al 
+                            <strong>valor total de los pagos</strong>, todos expresados en la fecha focal.
                         </p>
                         <p class="concept-footnote">
-                            La calculadora resuelve la incógnita <strong>X</strong> a partir
-                            de esta igualdad.
+                            Con esta igualdad se despeja la incógnita <strong>X</strong>.
                         </p>
                     </article>
+
                 </div>
             </section>
         </div>
