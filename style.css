@@ -199,3 +199,13 @@ body {
     padding: 0.25rem 0.4rem;
     border-radius: 6px;
 }
+/* Tabla de ecuaciones de valor equivalente */
+.tabla-eq th,
+.tabla-eq td {
+    font-size: 0.85rem;
+    vertical-align: middle;
+}
+
+.tabla-eq thead th {
+    background-color: #f9fafb;
+}

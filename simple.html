@@ -85,6 +85,14 @@
                 Descuento Simple (Comercial / Real)
             </button>
         </li>
+
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-equivalente" data-bs-toggle="tab"
+                data-bs-target="#pane-equivalente" type="button" role="tab">
+                Ecuaciones de valores equivalentes
+            </button>
+        </li>
+
     </ul>
 
     <div class="tab-content" id="mainTabsContent">
@@ -445,6 +453,90 @@
             </div>
         </div>
 
+                <!-- ============================================
+             PESTAÑA 3: ECUACIONES DE VALORES EQUIVALENTES
+        ============================================= -->
+        <div class="tab-pane fade" id="pane-equivalente" role="tabpanel">
+            <div class="card shadow-soft mb-3 mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Ecuaciones de valores equivalentes (Interés simple)</h5>
+                    <p class="small text-muted">
+                        Se basa en el principio:
+                        <strong>Valor total de las deudas = Valor total de los pagos</strong>, llevando
+                        todas las cantidades a una misma fecha (fecha focal) usando interés simple.
+                    </p>
+                    <p class="small text-muted mb-3">
+                        Para cada operación indica si es <strong>deuda</strong> o <strong>pago</strong>,
+                        su monto, tasa simple, tiempo hasta la fecha focal y si ocurre
+                        <strong>antes</strong> o <strong>después</strong> de la fecha focal.
+                        Marca con <strong>X</strong> la operación cuyo valor quieres encontrar.
+                    </p>
+
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle tabla-eq mb-2">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Monto</th>
+                                <th style="min-width: 220px;">Tasa simple</th>
+                                <th style="min-width: 220px;">Tiempo hasta fecha focal</th>
+                                <th>Posición<br><span class="small">respecto a la fecha focal</span></th>
+                                <th>¿Es X?</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbodyEqv">
+                            <!-- Filas dinámicas -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <button type="button" class="btn btn-primary btn-soft" id="btnAgregarEqv">
+                            Agregar operación
+                        </button>
+                        <button type="button" class="btn btn-success" id="btnCalcularEqv">
+                            Calcular X
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" id="btnLimpiarEqv">
+                            Limpiar
+                        </button>
+                    </div>
+
+                    <div class="alert alert-info small mb-0">
+                        <strong>Notas:</strong><br>
+                        • Usa <em>tasa = 0%</em> si una deuda o pago es “sin intereses”.<br>
+                        • El tiempo se expresa en años, meses y días (año comercial de 360 días),
+                          igual que en las otras secciones del programa.<br>
+                        • Si una cantidad ya está en la fecha focal, deja el tiempo en 0.
+                    </div>
+
+                    <div id="resultadoEqv" class="mt-4 d-none">
+                        <h6 class="mb-2">Resultados en la fecha focal:</h6>
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Valor total de las deudas:</span>
+                                <span id="resDeudasEqv"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Valor total de los pagos conocidos:</span>
+                                <span id="resPagosEqv"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Valor de X en la fecha focal:</span>
+                                <span id="resXEqv" class="result-highlight"></span>
+                            </li>
+                        </ul>
+
+                        <pre class="bg-light rounded p-3 small mb-0"
+                             id="detalleFormulaEqv"
+                             style="white-space: pre-wrap; font-family: 'Fira Code', 'Courier New', monospace;"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
     </div>
 
@@ -460,5 +552,6 @@
 <script src="app.js"></script>
 <script src="interes.js"></script>
 <script src="descuento.js"></script>
+<script src="equivalentes.js"></script> <!-- NUEVO -->
 </body>
 </html>
