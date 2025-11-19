@@ -464,3 +464,13 @@ body {
         align-items: flex-start;
     }
 }
+
+.color_txt1{
+    color: #1e3a8a;
+}
+.color_txt2{
+    color: #5b21b6;
+}
+.color_txt3{
+    color: #400404;
+}

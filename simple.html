@@ -105,7 +105,7 @@
 <div class="tab-pane fade show active" id="pane-interes" role="tabpanel">
 
     <div class="card shadow-soft mb-3">
-        <div class="card-body">
+        <div class="card-body color_txt1">
             <h5 class="card-title">Calculadora de Interés Simple</h5>
             <p class="card-text small text-muted">
                 Fórmulas base (con tiempo en años):
@@ -117,11 +117,11 @@
 
             <div class="row g-3">
                 <!-- Selección de variable a calcular -->
-                <div class="col-md-4">
+                <div class="col-md-4 ">
                     <label for="tipoCalculo" class="form-label">
                         ¿Qué deseas calcular?
                     </label>
-                    <select id="tipoCalculo" class="form-select">
+                    <select id="tipoCalculo" class="form-select color_txt1">
                         <option value="monto">Monto (M)</option>
                         <option value="capital">Capital (C)</option>
                         <option value="interes">Interés (I)</option>
@@ -166,7 +166,7 @@
                                     id="tasaValor" class="form-control"
                                     placeholder="Ej: 12" />
                                 <span class="input-group-text">%</span>
-                                <select id="tasaPeriodo" class="form-select">
+                                <select id="tasaPeriodo" class="form-select color_txt1">
                                     <option value="anual">% anual</option>
                                     <option value="semestral">% semestral</option>
                                     <option value="trimestral">% trimestral</option>
@@ -242,7 +242,7 @@
                                     <input type="date" id="fechaFin" class="form-control">
                                 </div>
                             </div>
-                            <div class="small-label mt-1">
+                            <div class="small-label mt-1 color_txt1">
                                 El programa calcula el tiempo entre las dos fechas:  
                                 <strong>tiempo real</strong> (base 365 días) y 
                                 <strong>tiempo aproximado</strong> (base 360 días).  
@@ -321,7 +321,7 @@
         ============================= -->
         <div class="tab-pane fade" id="pane-descuento" role="tabpanel">
             <div class="card shadow-sm border-0 mt-3">
-                <div class="card-body">
+                <div class="card-body color_txt2">
                     <h5 class="card-title mb-2">Calculadora de Descuento Simple</h5>
                     <p class="text-muted small mb-3">
                         <strong>Descuento comercial:</strong> D = M · d · t, C = M − D. <br>
@@ -342,7 +342,7 @@
 
                         <div class="col-md-4">
                             <label for="modoDesc" class="form-label">¿Qué deseas calcular?</label>
-                            <select id="modoDesc" class="form-select">
+                            <select id="modoDesc" class="form-select color_txt2">
                                 <option value="desdeM">C y D a partir de M, d y t</option>
                                 <option value="desdeC">M y D a partir de C, d y t</option> <!-- NUEVO -->
                                 <option value="desdeD">M y C a partir de D, d y t</option>
@@ -388,7 +388,7 @@
                             <div class="input-group">
                                 <input type="number" class="form-control" id="dDescValor" placeholder="Ej: 20">
                                 <span class="input-group-text">%</span>
-                                <select id="dDescPeriodo" class="form-select">
+                                <select id="dDescPeriodo" class="form-select color_txt2">
                                     <option value="anual">% anual</option>
                                     <option value="mensual">% mensual</option>
                                     <option value="trimestral">% trimestral</option>
@@ -463,14 +463,14 @@
         ============================================= -->
         <div class="tab-pane fade" id="pane-equivalente" role="tabpanel">
             <div class="card shadow-soft mb-3 mt-3">
-                <div class="card-body">
-                    <h5 class="card-title">Ecuaciones de valores equivalentes (Interés simple)</h5>
-                    <p class="small text-muted">
+                <div class="card-body color_txt3">
+                    <h5 class="card-title ">Ecuaciones de valores equivalentes (Interés simple)</h5>
+                    <p class="small color_txt3 ">
                         Se basa en el principio:
                         <strong>Valor total de las deudas = Valor total de los pagos</strong>, llevando
                         todas las cantidades a una misma fecha (fecha focal) usando interés simple.
                     </p>
-                    <p class="small text-muted mb-3">
+                    <p class="small color_txt3 mb-3">
                         Para cada operación indica si es <strong>deuda</strong> o <strong>pago</strong>,
                         su monto, tasa simple, tiempo hasta la fecha focal y si ocurre
                         <strong>antes</strong> o <strong>después</strong> de la fecha focal.
@@ -496,7 +496,8 @@
                         </table>
                     </div>
 
-                    <div class="d-flex flex-wrap gap-2 mb-3">
+                    <div class="d-flex flex-wrap gap-2 mb-3 justify-content-center">
+
                         <button type="button" class="btn boton-calculadora btn-soft" id="btnAgregarEqv">
                             Agregar operación
                         </button>
@@ -566,8 +567,17 @@
                 <img src="github2.png" alt="GitHub" class="footer-github-icon">
                 <span>Alejandro</span>
             </a>
+
+            <!-- Dev 3 -->
+            <a href="https://github.com/blackghossst"
+               target="_blank"
+               class="footer-dev-link">
+                <img src="github2.png" alt="GitHub" class="footer-github-icon">
+                <span>Néstor</span>
+            </a>
         </div>
     </div>
+
 </footer>
 
 </div>
