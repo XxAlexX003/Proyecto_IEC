@@ -7,7 +7,7 @@ body {
 
 /* Contenedor principal dejando espacio bajo la navbar */
 .main-container {
-    margin-top: 3rem;
+    margin-top: 2rem !important;
 }
 
 .container-fluid {
@@ -466,7 +466,7 @@ body {
 }
 
 .footer-dev-link:hover {
-    background: #000000;              /* azulito acorde a la app */
+    background: #000000;              
     border-color: rgba(234, 255, 0, 0.9);
     transform: translateY(-1px);
     box-shadow: 0 8px 20px rgba(255, 255, 0, 0.45);

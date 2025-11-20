@@ -13,37 +13,46 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg custom-navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Programa de Ingeniería Económica</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm custom-navbar">
+        <div class="container">
+            <!-- Brand con logo + texto -->
+            <a class="navbar-brand fw-semibold d-flex align-items-center gap-2" href="index.html">
+                <img src="Logo2.png" alt="IntereX's" style="height: 32px;">
+                <span>IntereX's</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav" aria-controls="navbarNav"
+                    aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active-page" href="#">Inicio</a>
+                        <a class="nav-link" href="index.html">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Calculadora</a>
+                        <a class="nav-link" href="simple.html">Calcular</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Conceptos</a>
+                        <!-- AQUÍ MARCAMOS LOGIN COMO ACTIVO -->
+                        <a class="nav-link active-page" href="login.html">Login</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <div class="hero">
-        <h1>Bienvenido al Programa de Ingeniería Económica</h1>
-        <p>Accede a herramientas y recursos para el cálculo de intereses, descuentos y valores equivalentes.</p>
-    </div>
-
     <!-- Main Container -->
-    <div class="container main-container">
+    <div class="container-fluid main-container">
+
+        <!-- Hero Section -->
+        <div class="hero text-center">
+            <h1>Bienvenido al Programa IntereX’s</h1>
+            <p>Accede a herramientas y recursos para el cálculo de intereses, descuentos y valores equivalentes.</p>
+        </div>
+
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
@@ -69,7 +78,7 @@
                                         <label for="loginPassword" class="form-label">Contraseña</label>
                                         <input type="password" class="form-control" id="loginPassword" required>
                                     </div>
-                                    <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+                                    <button type="submit" class="btn btn-soft boton-calculadora w-100">Iniciar Sesión</button>
                                     <div id="loginError" class="text-danger mt-2 d-none"></div>
                                 </form>
                             </div>
@@ -90,7 +99,7 @@
                                         <input type="password" class="form-control" id="registerConfirmPassword" required>
                                         <div id="confirmPasswordFeedback" class="mt-1"></div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+                                    <button type="submit" class="btn btn-soft boton-calculadora w-100">Registrarse</button>
                                     <div id="registerError" class="text-danger mt-2 d-none"></div>
                                     <div id="registerSuccess" class="text-success mt-2 d-none">Registro exitoso. Ahora inicia sesión.</div>
                                 </form>

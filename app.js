@@ -124,9 +124,12 @@ function getCurrentUser() {
 
 // Cerrar sesión
 function logout() {
+    // Borrar usuario de la sesión
     localStorage.removeItem(AUTH_CONFIG.sessionKey);
-    window.location.reload();
+    // Ir a la página de login
+    window.location.href = 'login.html';
 }
+
 
 // Validar sesión con IndexedDB (opcional para mayor seguridad)
 async function validateSessionWithDB() {
