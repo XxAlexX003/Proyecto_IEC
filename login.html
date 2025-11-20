@@ -13,35 +13,62 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg custom-navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Programa de Ingeniería Económica</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active-page" href="#">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Calculadora</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Conceptos</a>
-                    </li>
-                </ul>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light shadow-sm custom-navbar">
+    <div class="container">
+
+        <!-- Brand con imagen + texto -->
+        <a class="navbar-brand fw-semibold d-flex align-items-center gap-2" href="index.html">
+            <!-- Aquí pones la imagen que quieras -->
+            <img src="Logo2.png" alt="Logo" 
+                 style="height: 36px; width: auto; border-radius: 6px;">
+            <span>Interex'eS</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                data-bs-target="#navbarMain" aria-controls="navbarMain" 
+                aria-expanded="false" aria-label="Mostrar navegación">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+                <li class="nav-item">
+                    <a class="nav-link active-page" href="index.html">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="simple.html">Calcular</a>
+                </li>
+                <!-- Elemento para autenticación agregado -->
+                <li class="nav-item" id="authLink"></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<br>
+
+
+    <section class="hero shadow-sm">
+        <div class="row align-items-center">
+            <div class="col-md-8 align-items-center">
+                <h1>Bienvenido a IntereX’s</h1>
+                <p>
+                    Explora los conceptos clave de <strong>interés simple</strong>,
+                    <strong>descuento simple</strong> y
+                    <strong>ecuaciones de valores equivalentes</strong> con una
+                    calculadora interactiva pensada para tus ejercicios e informes.
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <span class="badge bg-soft">
+                    Universidad de El Salvador
+                </span>
+                <div class="small-label mt-2">
+                    Facultad Multidisciplinaria Oriental – Ingeniería en Sistemas
+                </div>
             </div>
         </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <div class="hero">
-        <h1>Bienvenido al Programa de Ingeniería Económica</h1>
-        <p>Accede a herramientas y recursos para el cálculo de intereses, descuentos y valores equivalentes.</p>
-    </div>
-
+    </section>
     <!-- Main Container -->
     <div class="container main-container">
         <div class="row justify-content-center">

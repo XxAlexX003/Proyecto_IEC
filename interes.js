@@ -1,11 +1,39 @@
 // ==========================
 //  INTERÉS SIMPLE
 // ==========================
+
+// *** FUNCIÓN GENERAL (puedes moverla a tu JS global si quieres) ***
+// Convierte una tasa anual simple (decimal) a otra periodicidad
+function tasaAnualAPeriodo(tasaAnual, periodo) {
+    if (!isFinite(tasaAnual) || tasaAnual < 0) return NaN;
+
+    switch (periodo) {
+        case "anual":
+            return tasaAnual;
+        case "semestral":
+            return tasaAnual / 2;
+        case "trimestral":
+            return tasaAnual / 4;
+        case "mensual":
+            return tasaAnual / 12;
+        case "diaria360":
+            return tasaAnual / 360;
+        case "diaria365":
+            return tasaAnual / 365;
+        default:
+            return tasaAnual;
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 
     var selectTipo   = document.getElementById("tipoCalculo");
     var radioManual  = document.getElementById("modoTiempoManual");
     var radioFechas  = document.getElementById("modoTiempoFechas");
+
+    // *** NUEVO: referencia al select del resultado y variable global de tasa anual ***
+    var resTasaPeriodoSelect = document.getElementById("resTasaPeriodo");
+    var tasaAnualEquivalente = NaN; // se rellenará después de cada cálculo
 
     // ---------- Helpers para resaltar el resultado calculado ----------
     function limpiarResaltado() {
@@ -34,6 +62,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("resTiempoAnios").classList.add("result-highlight");
                 break;
         }
+    }
+
+    // *** NUEVO: actualizar tasa mostrada según el periodo elegido en el resultado ***
+    function actualizarTasaResultado() {
+        if (!resTasaPeriodoSelect) return;
+        if (!isFinite(tasaAnualEquivalente)) return; // aún no hay cálculo
+
+        var periodoSeleccionado = resTasaPeriodoSelect.value;
+        var iPeriodo = tasaAnualAPeriodo(tasaAnualEquivalente, periodoSeleccionado);
+
+        document.getElementById("resTasa").innerText = formatPercent(iPeriodo);
+    }
+
+    // Listener del combo de resultado
+    if (resTasaPeriodoSelect) {
+        resTasaPeriodoSelect.addEventListener("change", actualizarTasaResultado);
     }
 
     // ---------- Habilitar / deshabilitar tiempo manual vs fechas ----------
@@ -322,9 +366,15 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("resCapital").innerText       = formatMoney(C);
             document.getElementById("resMonto").innerText         = formatMoney(M);
             document.getElementById("resInteres").innerText       = formatMoney(I);
-            document.getElementById("resTasa").innerText          = formatPercent(i);
             document.getElementById("resTiempoAnios").innerText   = t.toFixed(6) + " años";
             document.getElementById("resTiempoDesglosado").innerText = desglose.texto;
+
+            // *** NUEVO: guardar tasa anual y mostrarla según periodo elegido ***
+            tasaAnualEquivalente = i;                 // i SIEMPRE es anual en tus fórmulas
+            if (resTasaPeriodoSelect) {
+                resTasaPeriodoSelect.value = "anual"; // por defecto mostrar anual
+            }
+            actualizarTasaResultado();                 // escribe en #resTasa
 
             // Resaltar el valor principal según lo que se está calculando
             resaltarSegunTipo(tipo);
@@ -361,6 +411,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         var resultBox = document.getElementById("resultadoInteres");
         if (resultBox) resultBox.classList.add("d-none");
+
+        // *** NUEVO: resetear tasa anual y combo de periodo ***
+        tasaAnualEquivalente = NaN;
+        if (resTasaPeriodoSelect) {
+            resTasaPeriodoSelect.value = "anual";
+        }
 
         limpiarResaltado();
     });
