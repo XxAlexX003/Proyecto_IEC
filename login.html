@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - Programa de Ingeniería Económica</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- SweetAlert2 para alertas bonitas -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg custom-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Programa de Ingeniería Económica</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active-page" href="#">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Calculadora</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Conceptos</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Bienvenido al Programa de Ingeniería Económica</h1>
+        <p>Accede a herramientas y recursos para el cálculo de intereses, descuentos y valores equivalentes.</p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container main-container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4">Acceso al Programa</h3>
+                        <ul class="nav nav-tabs" id="loginTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">Iniciar Sesión</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab">Registrarse</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content mt-3" id="loginTabsContent">
+                            <!-- Login -->
+                            <div class="tab-pane fade show active" id="login" role="tabpanel">
+                                <form id="loginForm">
+                                    <div class="mb-3">
+                                        <label for="loginUsername" class="form-label">Usuario</label>
+                                        <input type="text" class="form-control" id="loginUsername" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="loginPassword" class="form-label">Contraseña</label>
+                                        <input type="password" class="form-control" id="loginPassword" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+                                    <div id="loginError" class="text-danger mt-2 d-none"></div>
+                                </form>
+                            </div>
+                            <!-- Registro -->
+                            <div class="tab-pane fade" id="register" role="tabpanel">
+                                <form id="registerForm">
+                                    <div class="mb-3">
+                                        <label for="registerUsername" class="form-label">Usuario</label>
+                                        <input type="text" class="form-control" id="registerUsername" required minlength="3">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerPassword" class="form-label">Contraseña (mín. 6 caracteres)</label>
+                                        <input type="password" class="form-control" id="registerPassword" required minlength="6">
+                                        <div id="passwordFeedback" class="mt-1"></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerConfirmPassword" class="form-label">Confirmar Contraseña</label>
+                                        <input type="password" class="form-control" id="registerConfirmPassword" required>
+                                        <div id="confirmPasswordFeedback" class="mt-1"></div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+                                    <div id="registerError" class="text-danger mt-2 d-none"></div>
+                                    <div id="registerSuccess" class="text-success mt-2 d-none">Registro exitoso. Ahora inicia sesión.</div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ==========================
+        //  MANEJO DE LOGIN Y REGISTRO
+        // ==========================
+
+        // IndexedDB setup
+        const dbName = 'UserDB';
+        const dbVersion = 1;
+        let db;
+
+        const openDB = () => {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(dbName, dbVersion);
+                
+                request.onupgradeneeded = (event) => {
+                    db = event.target.result;
+                    if (!db.objectStoreNames.contains('users')) {
+                        db.createObjectStore('users', { keyPath: 'username' });
+                    }
+                    console.log('Base de datos creada/actualizada correctamente');
+                };
+                
+                request.onsuccess = (event) => {
+                    db = event.target.result;
+                    console.log('DB abierta correctamente');
+                    resolve(db);
+                };
+                
+                request.onerror = (event) => {
+                    console.error('Error al abrir DB:', event.target.error);
+                    reject(event.target.error);
+                };
+            });
+        };
+
+        // ==========================
+        //  LOGIN
+        // ==========================
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+
+            // Ocultar error previo
+            errorDiv.classList.add('d-none');
+
+            // Validación básica
+            if (!username || !password) {
+                errorDiv.textContent = 'Usuario y contraseña son requeridos.';
+                errorDiv.classList.remove('d-none');
+                return;
+            }
+
+            // Deshabilitar botón mientras procesa
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Ingresando...';
+
+            try {
+                await openDB();
+                const transaction = db.transaction(['users'], 'readonly');
+                const store = transaction.objectStore('users');
+                const request = store.get(username);
+
+                request.onsuccess = () => {
+                    console.log('Resultado de búsqueda:', request.result);
+                    
+                    if (request.result && request.result.password === password) {
+                        // Login exitoso
+                        localStorage.setItem('loggedUser', username);
+                        
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Bienvenido!',
+                            text: `Hola ${username}, inicio de sesión exitoso.`,
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = 'index.html';
+                        });
+                    } else {
+                        // Credenciales incorrectas
+                        errorDiv.textContent = 'Usuario o contraseña incorrectos.';
+                        errorDiv.classList.remove('d-none');
+                        
+                        // Rehabilitar botón
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnText;
+                        
+                        // Limpiar contraseña por seguridad
+                        document.getElementById('loginPassword').value = '';
+                    }
+                };
+                
+                request.onerror = () => {
+                    console.error('Error al obtener usuario');
+                    errorDiv.textContent = 'Error al verificar usuario. Intenta de nuevo.';
+                    errorDiv.classList.remove('d-none');
+                    
+                    // Rehabilitar botón
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                };
+                
+            } catch (error) {
+                console.error('Error en login:', error);
+                errorDiv.textContent = 'Error interno. Intenta de nuevo.';
+                errorDiv.classList.remove('d-none');
+                
+                // Rehabilitar botón
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
+        });
+
+        // ==========================
+        //  REGISTRO
+        // ==========================
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('registerUsername').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            const errorDiv = document.getElementById('registerError');
+            const successDiv = document.getElementById('registerSuccess');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+
+            // Ocultar mensajes previos
+            errorDiv.classList.add('d-none');
+            successDiv.classList.add('d-none');
+
+            // Validaciones
+            if (!username || !password || !confirmPassword) {
+                errorDiv.textContent = 'Todos los campos son requeridos.';
+                errorDiv.classList.remove('d-none');
+                return;
+            }
+            
+            if (username.length < 3) {
+                errorDiv.textContent = 'El usuario debe tener al menos 3 caracteres.';
+                errorDiv.classList.remove('d-none');
+                return;
+            }
+            
+            if (password.length < 6) {
+                errorDiv.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+                errorDiv.classList.remove('d-none');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                errorDiv.textContent = 'Las contraseñas no coinciden.';
+                errorDiv.classList.remove('d-none');
+                return;
+            }
+
+            // Validación de seguridad de contraseña (opcional pero recomendado)
+            const hasNumber = /\d/.test(password);
+            const hasLetter = /[a-zA-Z]/.test(password);
+            
+            if (!hasNumber || !hasLetter) {
+                errorDiv.textContent = 'La contraseña debe contener letras y números.';
+                errorDiv.classList.remove('d-none');
+                return;
+            }
+
+            // Deshabilitar botón mientras procesa
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Registrando...';
+
+            try {
+                await openDB();
+                const transaction = db.transaction(['users'], 'readwrite');
+                const store = transaction.objectStore('users');
+                const request = store.add({ username, password });
+
+                request.onsuccess = () => {
+                    console.log('Usuario registrado exitosamente:', username);
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Registro exitoso!',
+                        text: `Usuario ${username} registrado correctamente. Ahora puedes iniciar sesión.`,
+                        confirmButtonText: 'Entendido'
+                    });
+                    
+                    // Limpiar formulario
+                    document.getElementById('registerForm').reset();
+                    
+                    // Rehabilitar botón
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                };
+                
+                request.onerror = (event) => {
+                    console.error('Error en registro:', event.target.error);
+                    
+                    if (event.target.error.name === 'ConstraintError') {
+                        errorDiv.textContent = 'El usuario ya existe. Por favor elige otro nombre.';
+                    } else {
+                        errorDiv.textContent = 'Error al registrar usuario. Intenta de nuevo.';
+                    }
+                    errorDiv.classList.remove('d-none');
+                    
+                    // Rehabilitar botón
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                };
+                
+            } catch (error) {
+                console.error('Error en registro:', error);
+                errorDiv.textContent = 'Error interno. Intenta de nuevo.';
+                errorDiv.classList.remove('d-none');
+                
+                // Rehabilitar botón
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
+        });
+
+        // ==========================
+        //  VERIFICACIÓN DE SESIÓN EXISTENTE
+        // ==========================
+        document.addEventListener('DOMContentLoaded', () => {
+            const loggedUser = localStorage.getItem('loggedUser');
+            
+            if (loggedUser) {
+                // Si ya hay una sesión activa, redirigir al index
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Ya tienes una sesión activa',
+                    text: `Estás conectado como ${loggedUser}`,
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.href = 'index.html';
+                });
+            }
+            
+            // Agregar efecto de focus a los campos
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+                
+                input.addEventListener('blur', function() {
+                    if (this.value === '') {
+                        this.parentElement.classList.remove('focused');
+                    }
+                });
+            });
+        });
+
+        // ==========================
+        //  MOSTRAR/OCULTAR CONTRASEÑA
+        // ==========================
+        function togglePasswordVisibility(inputId, iconElement) {
+            const input = document.getElementById(inputId);
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            
+            // Cambiar icono (si usas FontAwesome o similar)
+            if (iconElement) {
+                iconElement.classList.toggle('fa-eye');
+                iconElement.classList.toggle('fa-eye-slash');
+            }
+        }
+
+        // ==========================
+        //  VALIDACIÓN EN TIEMPO REAL
+        // ==========================
+        document.getElementById('registerPassword')?.addEventListener('input', function() {
+            const password = this.value;
+            const feedback = document.getElementById('passwordFeedback');
+            
+            if (!feedback) return;
+            
+            let strength = 0;
+            let messages = [];
+            
+            if (password.length >= 6) strength++;
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/\d/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+            
+            if (password.length === 0) {
+                feedback.textContent = '';
+                feedback.className = '';
+            } else if (strength < 2) {
+                feedback.textContent = 'Contraseña débil';
+                feedback.className = 'text-danger small';
+            } else if (strength < 4) {
+                feedback.textContent = 'Contraseña media';
+                feedback.className = 'text-warning small';
+            } else {
+                feedback.textContent = 'Contraseña fuerte';
+                feedback.className = 'text-success small';
+            }
+        });
+
+        // Verificar coincidencia de contraseñas en tiempo real
+        document.getElementById('registerConfirmPassword')?.addEventListener('input', function() {
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = this.value;
+            const feedback = document.getElementById('confirmPasswordFeedback');
+            
+            if (!feedback) return;
+            
+            if (confirmPassword.length === 0) {
+                feedback.textContent = '';
+                feedback.className = '';
+            } else if (password === confirmPassword) {
+                feedback.textContent = 'Las contraseñas coinciden';
+                feedback.className = 'text-success small';
+            } else {
+                feedback.textContent = 'Las contraseñas no coinciden';
+                feedback.className = 'text-danger small';
+            }
+        });
+    </script>
+</body>
+</html>

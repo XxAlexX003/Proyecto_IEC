@@ -1,6 +1,8 @@
 // ==========================
 //  UTILIDADES GENERALES
 // ==========================
+
+// Convierte años/meses/días a años (año comercial de 360 días)
 function tiempoDesglosadoAnios(anios, meses, dias) {
     var a = Number(anios);
     var m = Number(meses);
@@ -10,10 +12,10 @@ function tiempoDesglosadoAnios(anios, meses, dias) {
     if (isNaN(m)) m = 0;
     if (isNaN(d)) d = 0;
 
-    // Usamos año comercial de 360 días
     return a + (m / 12) + (d / 360);
 }
 
+// Convierte una tasa dada en cierto periodo a tasa anual simple (decimal)
 function tasaAPeriodoAnual(valorPorciento, periodo) {
     var r = Number(valorPorciento);
     if (isNaN(r) || r < 0) return NaN;
@@ -22,28 +24,16 @@ function tasaAPeriodoAnual(valorPorciento, periodo) {
 
     switch (periodo) {
         case "anual":      return dec;
-        case "semestral":  return dec * 2;     // 2 semestres por año
-        case "trimestral": return dec * 4;     // 4 trimestres
-        case "mensual":    return dec * 12;    // 12 meses
-        case "diaria360":  return dec * 360;   // 360 días
-        case "diaria365":  return dec * 365;   // 365 días
+        case "semestral":  return dec * 2;
+        case "trimestral": return dec * 4;
+        case "mensual":    return dec * 12;
+        case "diaria360":  return dec * 360;
+        case "diaria365":  return dec * 365;
         default:           return dec;
     }
 }
 
-function toYears(valor, unidad) {
-    var t = Number(valor);
-    if (isNaN(t) || t < 0) return NaN;
-
-    switch (unidad) {
-        case "anios":   return t;
-        case "meses":   return t / 12;
-        case "dias360": return t / 360;
-        case "dias365": return t / 365;
-        default:        return t;
-    }
-}
-
+// Formateos
 function formatMoney(x) {
     return "$" + x.toFixed(2);
 }
@@ -52,300 +42,222 @@ function formatPercent(i) {
     return (i * 100).toFixed(4) + " %";
 }
 
-// Helper para habilitar / deshabilitar inputs
+// Habilitar / deshabilitar un input
 function setDisabled(id, disabled) {
     var el = document.getElementById(id);
     if (!el) return;
     el.disabled = disabled;
     if (disabled) {
-        el.value = ""; // limpiamos si se deshabilita
+        el.value = "";
     }
 }
 
-function setDisabledTiempo(disabled) {
-    ["tAnos","tMeses","tDias"].forEach(function(id){
+// Para tiempo de INTERÉS SIMPLE
+function setDisabledTiempoSimple(disabled) {
+    ["tAnos", "tMeses", "tDias"].forEach(function (id) {
         setDisabled(id, disabled);
     });
 }
 
+// Para tiempo de DESCUENTO SIMPLE
+function setDisabledTiempoDesc(disabled) {
+    ["tDescAnos", "tDescMeses", "tDescDias"].forEach(function (id) {
+        setDisabled(id, disabled);
+    });
+}
+
+// Desglosa t (años, base 360) en años / meses / días aprox.
+function desglosarTiempo360(tAnios) {
+    var totalDias = tAnios * 360;
+    var anios = Math.floor(totalDias / 360);
+    var diasRestantes = totalDias % 360;
+    var meses = Math.floor(diasRestantes / 30);
+    var dias = Math.round(diasRestantes % 30);
+
+    return {
+        anios: anios,
+        meses: meses,
+        dias: dias,
+        texto: anios + " años, " + meses + " meses, " + dias + " días (aprox.)"
+    };
+}
+
 // ==========================
-//  LÓGICA AL CARGAR LA PÁGINA
+//  SISTEMA DE AUTENTICACIÓN MEJORADO
 // ==========================
-document.addEventListener("DOMContentLoaded", function () {
 
-    // ==========================
-    //   CONFIGURAR CAMPOS (M,C,I,i,t)
-    // ==========================
-    var selectTipo = document.getElementById("tipoCalculo");
-    if (selectTipo) {
+// Configuración de IndexedDB
+const AUTH_CONFIG = {
+    dbName: 'UserDB',
+    dbVersion: 1,
+    storeName: 'users',
+    sessionKey: 'loggedUser'
+};
 
-        function actualizarCamposPorTipo() {
-            var tipo = selectTipo.value;
+// Verificar si el usuario está autenticado
+function isUserAuthenticated() {
+    const loggedUser = localStorage.getItem(AUTH_CONFIG.sessionKey);
+    return loggedUser !== null && loggedUser.trim() !== '';
+}
 
-            // Primero habilitamos todo
-            setDisabled("capitalInput", false);
-            setDisabled("montoInput", false);
-            setDisabled("interesInput", false);
-            setDisabled("tasaValor", false);
-            setDisabledTiempo(false);
+// Obtener el usuario actual
+function getCurrentUser() {
+    return localStorage.getItem(AUTH_CONFIG.sessionKey);
+}
 
-            // Luego deshabilitamos según el tipo a calcular
-            switch (tipo) {
-                case "monto":
-                    // Calcular M => NO escribo M ni I
-                    setDisabled("montoInput", true);
-                    setDisabled("interesInput", true);
-                    break;
+// Cerrar sesión
+function logout() {
+    localStorage.removeItem(AUTH_CONFIG.sessionKey);
+    window.location.reload();
+}
 
-                case "capital":
-                    // Calcular C => NO escribo C ni I
-                    setDisabled("capitalInput", true);
-                    setDisabled("interesInput", true);
-                    break;
+// Validar sesión con IndexedDB (opcional para mayor seguridad)
+async function validateSessionWithDB() {
+    const username = getCurrentUser();
+    if (!username) return false;
 
-                case "interes":
-                    // Calcular I => NO escribo M ni I
-                    setDisabled("montoInput", true);
-                    setDisabled("interesInput", true);
-                    break;
+    try {
+        const db = await openAuthDB();
+        const transaction = db.transaction([AUTH_CONFIG.storeName], 'readonly');
+        const store = transaction.objectStore(AUTH_CONFIG.storeName);
+        
+        return new Promise((resolve) => {
+            const request = store.get(username);
+            request.onsuccess = () => {
+                resolve(request.result !== undefined);
+            };
+            request.onerror = () => {
+                resolve(false);
+            };
+        });
+    } catch (error) {
+        console.error('Error validando sesión:', error);
+        return false;
+    }
+}
 
-                case "tasa":
-                    // Calcular i => NO escribo tasa ni I
-                    setDisabled("tasaValor", true);
-                    setDisabled("interesInput", true);
-                    break;
+// Abrir conexión a IndexedDB (auxiliar)
+function openAuthDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(AUTH_CONFIG.dbName, AUTH_CONFIG.dbVersion);
+        
+        request.onsuccess = (event) => {
+            resolve(event.target.result);
+        };
+        
+        request.onerror = (event) => {
+            reject(event.target.error);
+        };
+    });
+}
 
-                case "tiempo":
-                    // Calcular t => NO escribo t ni I
-                    setDisabledTiempo(true);
-                    setDisabled("interesInput", true);
-                    break;
-            }
+// Mostrar/Ocultar elementos según autenticación
+function toggleAuthElements() {
+    const isAuthenticated = isUserAuthenticated();
+    
+    // Elementos de resultados (a mostrar si está autenticado)
+    const resultElements = document.querySelectorAll('[data-auth-result]');
+    resultElements.forEach(el => {
+        if (isAuthenticated) {
+            el.classList.remove('d-none');
+        } else {
+            el.classList.add('d-none');
         }
+    });
+    
+    // Elementos de login requerido (a mostrar si NO está autenticado)
+    const loginRequiredElements = document.querySelectorAll('[data-auth-required]');
+    loginRequiredElements.forEach(el => {
+        if (isAuthenticated) {
+            el.classList.add('d-none');
+        } else {
+            el.classList.remove('d-none');
+        }
+    });
+}
 
-        // Ejecutar al cargar
-        actualizarCamposPorTipo();
-
-        // Ejecutar cada vez que cambia la opción
-        selectTipo.addEventListener("change", actualizarCamposPorTipo);
-    }
-
-    // ==========================
-    //   INTERÉS SIMPLE
-    // ==========================
-    var btnCalcularInteres = document.getElementById("btnCalcularInteres");
-    var btnLimpiarInteres = document.getElementById("btnLimpiarInteres");
-
-    if (btnCalcularInteres && btnLimpiarInteres) {
-        btnCalcularInteres.addEventListener("click", function () {
-            var tipo = document.getElementById("tipoCalculo").value;
-
-            var C = parseFloat(document.getElementById("capitalInput").value);
-            var M = parseFloat(document.getElementById("montoInput").value);
-            var I = parseFloat(document.getElementById("interesInput").value);
-
-            var tasaValor = parseFloat(document.getElementById("tasaValor").value);
-            var tasaPeriodo = document.getElementById("tasaPeriodo").value;
-            var i = tasaAPeriodoAnual(tasaValor, tasaPeriodo); // decimal anual
-
-            var tA = parseFloat(document.getElementById("tAnos").value);
-            var tM = parseFloat(document.getElementById("tMeses").value);
-            var tD = parseFloat(document.getElementById("tDias").value);
-            var t = tiempoDesglosadoAnios(tA, tM, tD);
-
-            var resultBox = document.getElementById("resultadoInteres");
-            var detalleBox = document.getElementById("detalleFormulaInteres");
-
-            resultBox.classList.add("d-none");
-            if (detalleBox) detalleBox.innerText = "";
-
-            try {
-                switch (tipo) {
-                    case "monto":
-                        if (isNaN(C) || isNaN(i) || isNaN(t) || t <= 0) {
-                            throw "Para calcular el monto (M) necesitas Capital (C), Tasa y Tiempo.";
-                        }
-                        I = C * i * t;
-                        M = C + I;
-                        detalleBox.innerText =
-                            "M = C (1 + i · t)\n" +
-                            "M = " + C.toFixed(2) + " · (1 + " + i.toFixed(6) + " · " + t.toFixed(6) + ")";
-                        break;
-
-                    case "capital":
-                        if (isNaN(M) || isNaN(i) || isNaN(t) || t <= 0) {
-                            throw "Para calcular el capital (C) necesitas Monto (M), Tasa y Tiempo.";
-                        }
-                        C = M / (1 + i * t);
-                        I = M - C;
-                        detalleBox.innerText =
-                            "C = M / (1 + i · t)\n" +
-                            "C = " + M.toFixed(2) + " / (1 + " + i.toFixed(6) + " · " + t.toFixed(6) + ")";
-                        break;
-
-                    case "interes":
-                        if (isNaN(C) || isNaN(i) || isNaN(t) || t <= 0) {
-                            throw "Para calcular el interés (I) necesitas Capital (C), Tasa y Tiempo.";
-                        }
-                        I = C * i * t;
-                        M = C + I;
-                        detalleBox.innerText =
-                            "I = C · i · t\n" +
-                            "I = " + C.toFixed(2) + " · " + i.toFixed(6) + " · " + t.toFixed(6);
-                        break;
-
-                    case "tasa":
-                        if (isNaN(C) || isNaN(M) || isNaN(t) || t <= 0) {
-                            throw "Para calcular la tasa (i) necesitas Capital (C), Monto (M) y Tiempo (t).";
-                        }
-                        i = (M / C - 1) / t;
-                        I = M - C;
-                        detalleBox.innerText =
-                            "i = (M / C − 1) / t\n" +
-                            "i = (" + M.toFixed(2) + " / " + C.toFixed(2) + " − 1) / " + t.toFixed(6);
-                        break;
-
-                    case "tiempo":
-                        if (isNaN(C) || isNaN(M) || isNaN(i) || i <= 0) {
-                            throw "Para calcular el tiempo (t) necesitas Capital (C), Monto (M) y Tasa (i).";
-                        }
-                        t = (M / C - 1) / i;
-                        I = M - C;
-                        detalleBox.innerText =
-                            "t = (M / C − 1) / i\n" +
-                            "t = (" + M.toFixed(2) + " / " + C.toFixed(2) + " − 1) / " + i.toFixed(6);
-                        break;
-                }
-
-                // Desglose de tiempo en años/meses/días aproximados (año de 360 días)
-                var tAnios = t;
-                var totalDias = tAnios * 360;
-                var anios = Math.floor(totalDias / 360);
-                var diasRestantes = totalDias % 360;
-                var meses = Math.floor(diasRestantes / 30);
-                var dias = Math.round(diasRestantes % 30);
-
-                var desglose = anios + " años, " + meses + " meses, " + dias + " días (aprox.)";
-
-                // Mostrar resultados
-                document.getElementById("resCapital").innerText = formatMoney(C);
-                document.getElementById("resMonto").innerText = formatMoney(M);
-                document.getElementById("resInteres").innerText = formatMoney(I);
-                document.getElementById("resTasa").innerText = formatPercent(i);
-                document.getElementById("resTiempoAnios").innerText = tAnios.toFixed(6) + " años";
-                document.getElementById("resTiempoDesglosado").innerText = desglose;
-
-                resultBox.classList.remove("d-none");
-
+// Proteger botones de cálculo
+function protectCalculationButtons() {
+    const calcButtons = document.querySelectorAll('[data-calc-button]');
+    
+    calcButtons.forEach(button => {
+        const originalClick = button.onclick;
+        
+        button.addEventListener('click', function(e) {
+            if (!isUserAuthenticated()) {
+                e.preventDefault();
+                e.stopPropagation();
+                
                 Swal.fire({
-                    icon: "success",
-                    title: "Cálculo realizado",
-                    showConfirmButton: false,
-                    timer: 1100
+                    icon: 'warning',
+                    title: 'Autenticación requerida',
+                    text: 'Debes iniciar sesión para realizar cálculos.',
+                    confirmButtonText: 'Ir a Login',
+                    showCancelButton: true,
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'login.html';
+                    }
                 });
-
-            } catch (error) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Datos incompletos",
-                    text: error
-                });
+                
+                return false;
             }
         });
+    });
+}
 
-        btnLimpiarInteres.addEventListener("click", function () {
-            ["capitalInput","montoInput","interesInput","tasaValor",
-             "tAnos","tMeses","tDias"].forEach(function(id) {
-                var el = document.getElementById(id);
-                if (el && !el.disabled) {
-                    el.value = "";
-                }
-            });
-            var resultBox = document.getElementById("resultadoInteres");
-            if (resultBox) resultBox.classList.add("d-none");
-        });
-    }
-
-    // ==========================
-    //   DESCUENTO SIMPLE
-    // ==========================
-    var btnCalcularDescuento = document.getElementById("btnCalcularDescuento");
-    var btnLimpiarDescuento = document.getElementById("btnLimpiarDescuento");
-
-    if (btnCalcularDescuento && btnLimpiarDescuento) {
-        btnCalcularDescuento.addEventListener("click", function () {
-            var tipo = document.getElementById("tipoDescuento").value;
-
-            var M = parseFloat(document.getElementById("MDesc").value);
-
-            var dValor = parseFloat(document.getElementById("dDescValor").value);
-            var dPeriodo = document.getElementById("dDescPeriodo").value;
-            var d = tasaAPeriodoAnual(dValor, dPeriodo); // descuento anual (decimal)
-
-            var tA = parseFloat(document.getElementById("tDescAnos").value);
-            var tM = parseFloat(document.getElementById("tDescMeses").value);
-            var tD = parseFloat(document.getElementById("tDescDias").value);
-            var t = tiempoDesglosadoAnios(tA, tM, tD);   // tiempo en años
-
-            var resultBox = document.getElementById("resultadoDescuento");
-            var detalleBox = document.getElementById("detalleFormulaDescuento");
-
-            resultBox.classList.add("d-none");
-            if (detalleBox) detalleBox.innerText = "";
-
-            if (isNaN(M) || isNaN(d) || isNaN(t) || t <= 0) {
+// Actualizar navbar según estado de autenticación
+function updateNavbar() {
+    const authLink = document.getElementById('authLink');
+    if (!authLink) return;
+    
+    const loggedUser = getCurrentUser();
+    
+    if (loggedUser) {
+        authLink.innerHTML = `<a class="nav-link" href="#" id="logout">Logout (${loggedUser})</a>`;
+        const logoutBtn = document.getElementById('logout');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
                 Swal.fire({
-                    icon: "warning",
-                    title: "Faltan datos",
-                    text: "Completa M, d y t correctamente para calcular el descuento."
+                    icon: 'question',
+                    title: '¿Cerrar sesión?',
+                    text: '¿Estás seguro de que quieres cerrar sesión?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, cerrar sesión',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        logout();
+                    }
                 });
-                return;
-            }
-
-            var C, D;
-
-            if (tipo === "comercial") {
-                // Descuento comercial: D = M d t, C = M - D
-                D = M * d * t;
-                C = M - D;
-                detalleBox.innerText =
-                    "Descuento comercial:\n" +
-                    "D = M · d · t\n" +
-                    "D = " + M.toFixed(2) + " · " + d.toFixed(6) + " · " + t.toFixed(6) +
-                    "\nC = M − D";
-            } else {
-                // Descuento real: M = C (1 + d t) → C = M / (1 + d t), D = M - C
-                C = M / (1 + d * t);
-                D = M - C;
-                detalleBox.innerText =
-                    "Descuento real (justo):\n" +
-                    "M = C (1 + d · t)  ⇒  C = M / (1 + d · t)\n" +
-                    "C = " + M.toFixed(2) + " / (1 + " + d.toFixed(6) + " · " + t.toFixed(6) + ")";
-            }
-
-            document.getElementById("resDM").innerText = formatMoney(M);
-            document.getElementById("resDC").innerText = formatMoney(C);
-            document.getElementById("resDD").innerText = formatMoney(D);
-            document.getElementById("resDT").innerText = t.toFixed(6) + " años";
-
-            resultBox.classList.remove("d-none");
-
-            Swal.fire({
-                icon: "success",
-                title: "Descuento calculado",
-                showConfirmButton: false,
-                timer: 1100
             });
-        });
-
-        btnLimpiarDescuento.addEventListener("click", function () {
-            ["MDesc","dDescValor","tDescAnos","tDescMeses","tDescDias"].forEach(function(id) {
-                var el = document.getElementById(id);
-                if (el) el.value = "";
-            });
-            var resultBox = document.getElementById("resultadoDescuento");
-            if (resultBox) resultBox.classList.add("d-none");
-        });
+        }
+    } else {
+        authLink.innerHTML = `<a class="nav-link" href="login.html">Login</a>`;
     }
+}
+
+// ==========================
+//  INICIALIZACIÓN
+// ==========================
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar tooltips de Bootstrap
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+    
+    // Actualizar navbar
+    updateNavbar();
+    
+    // Toggle de elementos según autenticación
+    toggleAuthElements();
+    
+    // Proteger botones de cálculo
+    protectCalculationButtons();
+    
+    console.log('Sistema de autenticación inicializado');
+    console.log('Usuario autenticado:', isUserAuthenticated() ? getCurrentUser() : 'Ninguno');
 });
-

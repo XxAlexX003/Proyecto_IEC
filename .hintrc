@@ -7,8 +7,11 @@
     "axe/forms": [
       "default",
       {
-        "select-name": "off"
+        "select-name": "off",
+        "label": "off"
       }
-    ]
+    ],
+    "no-inline-styles": "off",
+    "disown-opener": "off"
   }
 }
