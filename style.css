@@ -7,7 +7,7 @@ body {
 
 /* Contenedor principal dejando espacio bajo la navbar */
 .main-container {
-    margin-top: 3rem;
+    margin-top: 2rem !important;
 }
 
 .container-fluid {
@@ -391,9 +391,31 @@ body {
 }
 
 .boton-calculadora:hover {
-    background: #3a86b6;
+    background: #60acdb;
     color: #ffff;
 }
+
+/* Botón "Limpiar" con fondo suave gris/azulado */
+.btn-limpiar {
+    background: #646464;         
+    color: #f8f9fa;              
+    border-radius: 999px;
+    border: 1px solid #cbd5e1;   
+    padding-inline: 1.6rem;
+    transition: transform .12s ease,
+                box-shadow .12s ease,
+                background-color .12s ease,
+                border-color .12s ease;
+}
+
+.btn-limpiar:hover {
+    background: rgba(31, 41, 55, 0.9);          
+    border-color: #9ca3af;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(148, 163, 184, 0.45);
+}
+
 
 
 /* =========================
@@ -444,7 +466,7 @@ body {
 }
 
 .footer-dev-link:hover {
-    background: #000000;              /* azulito acorde a la app */
+    background: #000000;              
     border-color: rgba(234, 255, 0, 0.9);
     transform: translateY(-1px);
     box-shadow: 0 8px 20px rgba(255, 255, 0, 0.45);

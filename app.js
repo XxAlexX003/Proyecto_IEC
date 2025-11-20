@@ -82,6 +82,23 @@ function desglosarTiempo360(tAnios) {
     };
 }
 
+// limpiar campos con boton
+
+const toastLimpiar = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true
+});
+
+function mostrarToastLimpiar() {
+    toastLimpiar.fire({
+        icon: 'info',
+        title: 'Campos limpiados'
+    });
+}
+
 // ==========================
 //  SISTEMA DE AUTENTICACIÓN MEJORADO
 // ==========================
@@ -107,9 +124,12 @@ function getCurrentUser() {
 
 // Cerrar sesión
 function logout() {
+    // Borrar usuario de la sesión
     localStorage.removeItem(AUTH_CONFIG.sessionKey);
-    window.location.reload();
+    // Ir a la página de login
+    window.location.href = 'login.html';
 }
+
 
 // Validar sesión con IndexedDB (opcional para mayor seguridad)
 async function validateSessionWithDB() {

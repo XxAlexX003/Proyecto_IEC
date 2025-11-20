@@ -363,5 +363,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (resultBox) resultBox.classList.add("d-none");
 
         limpiarResaltado();
+        mostrarToastLimpiar();
     });
 });

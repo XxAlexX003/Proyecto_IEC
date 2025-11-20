@@ -341,5 +341,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var detalleBox = document.getElementById("detalleFormulaEqv");
         if (resBox)    resBox.classList.add("d-none");
         if (detalleBox) detalleBox.textContent = "";
+
+        mostrarToastLimpiar();
     });
 });

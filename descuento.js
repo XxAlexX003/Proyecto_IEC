@@ -358,5 +358,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // quitar resaltados
         limpiarResaltadoDesc();
+         mostrarToastLimpiar();
     });
 });
