@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var radioManual  = document.getElementById("modoTiempoManual");
     var radioFechas  = document.getElementById("modoTiempoFechas");
 
-        // ---------- Helpers para resaltar el resultado calculado ----------
+    // ---------- Helpers para resaltar el resultado calculado ----------
     function limpiarResaltado() {
         ["resCapital", "resMonto", "resInteres", "resTasa", "resTiempoAnios"].forEach(function (id) {
             var el = document.getElementById(id);
@@ -130,6 +130,23 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!btnCalcularInteres || !btnLimpiarInteres) return;
 
     btnCalcularInteres.addEventListener("click", function () {
+        // VALIDACIÓN DE AUTENTICACIÓN
+        if (!isUserAuthenticated()) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Autenticación requerida',
+                text: 'Debes iniciar sesión para realizar cálculos.',
+                confirmButtonText: 'Ir a Login',
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'login.html';
+                }
+            });
+            return;
+        }
+
         var tipo = document.getElementById("tipoCalculo").value;
 
         var C = parseFloat(document.getElementById("capitalInput").value);
@@ -307,8 +324,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("resInteres").innerText       = formatMoney(I);
             document.getElementById("resTasa").innerText          = formatPercent(i);
             document.getElementById("resTiempoAnios").innerText   = t.toFixed(6) + " años";
-            document.getElementById("resTiempoDesglosado").innerText =
-                desglose.texto;
+            document.getElementById("resTiempoDesglosado").innerText = desglose.texto;
 
             // Resaltar el valor principal según lo que se está calculando
             resaltarSegunTipo(tipo);
@@ -347,9 +363,5 @@ document.addEventListener("DOMContentLoaded", function () {
         if (resultBox) resultBox.classList.add("d-none");
 
         limpiarResaltado();
-
     });
-
-    // Estado inicial correcto
-    actualizarModoTiempo();
 });
