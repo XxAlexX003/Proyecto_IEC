@@ -419,5 +419,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         limpiarResaltado();
+        mostrarToastLimpiar();
     });
 });
