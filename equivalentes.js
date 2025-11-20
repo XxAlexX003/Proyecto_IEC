@@ -157,6 +157,23 @@ document.addEventListener("DOMContentLoaded", function () {
     // Cálculo de la ecuación
     // ----------------------------
     btnCalcularEqv.addEventListener("click", function () {
+        // Verificación de autenticación antes de calcular
+        if (!isUserAuthenticated()) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Autenticación requerida',
+                text: 'Debes iniciar sesión para realizar cálculos.',
+                confirmButtonText: 'Ir a Login',
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'login.html';
+                }
+            });
+            return;
+        }
+
         var filas = tbodyEqv.querySelectorAll("tr");
         if (filas.length === 0) {
             Swal.fire({

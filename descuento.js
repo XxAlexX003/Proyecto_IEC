@@ -75,6 +75,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     btnCalcularDescuento.addEventListener("click", function () {
+        // ==========================================
+        // VALIDACIÓN DE AUTENTICACIÓN
+        // ==========================================
+        if (!isUserAuthenticated()) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Autenticación requerida',
+                text: 'Debes iniciar sesión para realizar cálculos.',
+                confirmButtonText: 'Ir a Login',
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'login.html';
+                }
+            });
+            return;
+        }
+
         var tipo = document.getElementById("tipoDescuento").value; // comercial / real
         var modo = document.getElementById("modoDesc").value;
 
@@ -300,7 +319,12 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("resDC").innerText = formatMoney(C);
             document.getElementById("resDD").innerText = formatMoney(D);
             document.getElementById("resDT").innerText = t.toFixed(6) + " años";
-            document.getElementById("resDTDesglosado").innerText = desg.texto;
+            
+            // Verificar si existe el elemento antes de actualizar
+            var resDTDesglosado = document.getElementById("resDTDesglosado");
+            if (resDTDesglosado) {
+                resDTDesglosado.innerText = desg.texto;
+            }
 
             // 🔹 Resaltar lo que se está calculando según el modo
             resaltarSegunModoDesc(modo);
